@@ -32,14 +32,17 @@
     right: 0;
 }
  
-</style> <header class="bg-gray-800 flex justify-between items-center p-4 text-white">
+</style>
+<header class="bg-gray-800 flex justify-between items-center p-4 text-white">
   <div class="flex items-center">
       <img src="school-logo.png" alt="School Logo" class="w-12 h-12 mr-4">
       <div class="text-lg font-bold">ZDSPGC Heat Index Map</div>
   </div>
   <div class="flex items-center">
-      
-      <nav class="flex space-x-4">
+      <button id="menu-toggle" class="sm:hidden flex items-center px-3 py-2 border rounded text-gray-200 border-gray-400 hover:text-white hover:border-white">
+          <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0zM0 9h20v2H0zM0 15h20v2H0z"/></svg>
+      </button>
+      <nav id="menu" class="hidden sm:flex space-x-4">
           <a href="#dashboard" onclick="showSection('dashboard')" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
           <a href="#map-view" onclick="showSection('map-view')" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Map View</a>
           <a href="#sensors" onclick="showSection('sensors')" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Sensors</a>
@@ -50,18 +53,59 @@
   </div>
 </header>
 
+<!-- Sidebar for Mobile Menu -->
+<div id="sidebar" class="fixed inset-0 bg-gray-800 bg-opacity-90 z-50 transform -translate-x-full transition-transform sm:hidden">
+  <div class="flex justify-between items-center p-4">
+      <div class="text-lg font-bold text-white">ZDSPGC Heat Index Map</div>
+      <button id="sidebar-close" class="text-white">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+      </button>
+  </div>
+  <nav class="mt-8">
+      <a href="#dashboard" onclick="showSection('dashboard')" class="block text-white px-4 py-2 hover:bg-gray-700">Dashboard</a>
+      <a href="#map-view" onclick="showSection('map-view')" class="block text-white px-4 py-2 hover:bg-gray-700">Map View</a>
+      <a href="#sensors" onclick="showSection('sensors')" class="block text-white px-4 py-2 hover:bg-gray-700">Sensors</a>
+      <a href="#alerts" onclick="showSection('alerts')" class="block text-white px-4 py-2 hover:bg-gray-700">Alerts</a>
+      <a href="#history" onclick="showSection('history')" class="block text-white px-4 py-2 hover:bg-gray-700">History</a>
+      <a href="#settings" onclick="showSection('settings')" class="block text-white px-4 py-2 hover:bg-gray-700">Settings</a>
+  </nav>
+</div>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const sidebar = document.getElementById('sidebar');
+  const sidebarClose = document.getElementById('sidebar-close');
+
+  menuToggle.addEventListener('click', function() {
+      sidebar.classList.toggle('-translate-x-full');
+  });
+
+  sidebarClose.addEventListener('click', function() {
+      sidebar.classList.add('-translate-x-full');
+  });
+
+  // Close sidebar when clicking outside
+  document.addEventListener('click', function(event) {
+      if (!sidebar.contains(event.target) && !menuToggle.contains(event.target)) {
+          sidebar.classList.add('-translate-x-full');
+      }
+  });
+</script>
+
   <div class="flex flex-col min-h-screen"> 
   <main class="flex-1">
-    <section id="dashboard" class="p-4 bg-white rounded-lg shadow-md">
-      <div class="content-header mb-4 flex justify-between items-center">
-          <h1 class="text-2xl font-bold">Overview of Current Conditions</h1>
+    <section id="dashboard" class="p-6 bg-white rounded-lg shadow-md mb-6">
+      <div class="content-header mb-4 flex justify-between items-center flex-wrap">
+          <h1 class="text-2xl font-bold mb-2 sm:mb-0">Overview of Current Conditions</h1>
           <div class="relative">
-              <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded" id="quick-actions-btn">
+              <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded flex items-center" id="quick-actions-btn">
                   Quick Actions
                   <i class="fas fa-caret-down ml-2"></i>
               </button>
               <!-- Dropdown menu -->
-              <div class="quick-actions-dropdown bg-white border border-gray-200 rounded shadow-md p-4 hidden absolute right-0 mt-2">
+              <div class="quick-actions-dropdown bg-white border border-gray-200 rounded shadow-md p-4 hidden absolute right-0 mt-2 z-10 w-48">
                   <ul>
                       <li>
                           <a href="#" class="flex items-center py-2 px-4 hover:bg-gray-100">
@@ -91,17 +135,19 @@
               </div>
           </div>
       </div>
-      <div>
-          <canvas id="conditionsChart" class="w-full h-70"></canvas>
+      <div class="w-full h-full">
+          <canvas id="conditionsChart" class="w-full h-full"></canvas>
       </div>
   </section>
+
   
-  <section id="map-view" class="p-4 bg-white rounded-lg shadow-md">
+  <section id="map-view" class="p-6 bg-white rounded-lg shadow-md mb-6">
     <div class="content-header mb-4 flex justify-between items-center">
         <h1 class="text-2xl font-bold">Map View</h1>
     </div>
-    <div class="main-content flex">
-        <div class="sidebar w-1/4 p-4 bg-gray-100 rounded mr-4">
+    <div class="main-content flex flex-col sm:flex-row">
+        <!-- Sidebar with Legend and Filters -->
+        <div class="sidebar w-full sm:w-1/4 p-4 bg-gray-100 rounded mb-4 sm:mr-4">
             <h3 class="text-lg font-semibold mb-2">Legend</h3>
             <ul>
                 <li class="flex items-center mb-2">
@@ -136,12 +182,14 @@
                         <option value="inactive">Inactive</option>
                     </select>
                 </div>
-                <button type="button" onclick="applyFilters()" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">Apply Filters</button>
+                <button type="button" onclick="applyFilters()" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md w-full sm:w-auto">Apply Filters</button>
             </form>
         </div>
-        <div id="map" class="w-3/4 bg-gray-300 rounded"></div>
+        <!-- Map Container -->
+        <div id="map" class="w-full sm:w-3/4 bg-gray-300 rounded"></div>
     </div>
 </section>
+
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script>
     // Initialize the map
@@ -158,6 +206,8 @@
         { lat: 51.51, lng: -0.1, status: 'caution' },
         { lat: 51.49, lng: -0.08, status: 'danger' }
     ];
+
+    var markerLayer = L.layerGroup();
 
     markers.forEach(function(marker) {
         var color;
@@ -178,8 +228,10 @@
             color: color,
             radius: 8,
             fillOpacity: 0.8
-        }).addTo(map);
+        }).addTo(markerLayer);
     });
+
+    markerLayer.addTo(map);
 
     function applyFilters() {
         // Retrieve filter values
@@ -187,11 +239,7 @@
         var sensorStatusFilter = document.getElementById('sensor-status-filter').value;
 
         // Clear existing markers
-        map.eachLayer(function (layer) {
-            if (layer instanceof L.CircleMarker) {
-                map.removeLayer(layer);
-            }
-        });
+        markerLayer.clearLayers();
 
         // Add markers based on filters
         markers.forEach(function(marker) {
@@ -215,30 +263,46 @@
                     color: color,
                     radius: 8,
                     fillOpacity: 0.8
-                }).addTo(map);
+                }).addTo(markerLayer);
             }
         });
+
+        markerLayer.addTo(map);
     }
 </script>
 
 
-<section id="sensors" class="p-4 bg-white rounded-lg shadow-md">
+
+<section id="sensors" class="p-6 bg-white rounded-lg shadow-md mb-6">
   <div class="content-header mb-4">
       <h1 class="text-2xl font-bold text-center">Sensor Management</h1>
   </div>
-  <table class="w-full mb-4">
-      <thead>
-          <tr class="bg-gray-200">
-              <th class="py-2 px-4 border-b border-gray-300 text-center">ID</th>
-              <th class="py-2 px-4 border-b border-gray-300 text-center">Location</th>
-              <th class="py-2 px-4 border-b border-gray-300 text-center">Status</th>
-              <th class="py-2 px-4 border-b border-gray-300 text-center">Last Update</th>
-          </tr>
-      </thead>
-      <tbody id="sensor-table-body">
-          <!-- Example sensor data will be dynamically added here -->
-      </tbody>
-  </table>
+  <div class="overflow-x-auto">
+      <table class="w-full mb-4 whitespace-nowrap">
+          <thead>
+              <tr class="bg-gray-200">
+                  <th class="py-2 px-4 border-b border-gray-300 text-center">ID</th>
+                  <th class="py-2 px-4 border-b border-gray-300 text-center">Location</th>
+                  <th class="py-2 px-4 border-b border-gray-300 text-center">Status</th>
+                  <th class="py-2 px-4 border-b border-gray-300 text-center">Last Update</th>
+                  <th class="py-2 px-4 border-b border-gray-300 text-center">Actions</th>
+              </tr>
+          </thead>
+          <tbody id="sensor-table-body">
+              <!-- Example sensor data will be dynamically added here -->
+              <tr>
+                  <td class="py-2 px-4 border-b border-gray-300 text-center">1</td>
+                  <td class="py-2 px-4 border-b border-gray-300 text-center">Room A</td>
+                  <td class="py-2 px-4 border-b border-gray-300 text-center">Active</td>
+                  <td class="py-2 px-4 border-b border-gray-300 text-center">2024-06-15 10:00 AM</td>
+                  <td class="py-2 px-4 border-b border-gray-300 text-center">
+                      <button class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded-md">Edit</button>
+                      <button class="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded-md ml-2">Delete</button>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
   <button onclick="showAddSensorForm()" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Add Sensor</button>
   <div id="add-sensor-form" class="hidden mt-4">
       <h2 class="text-xl font-bold mb-2">Add/Edit Sensor</h2>
@@ -266,99 +330,64 @@
               <input type="text" id="last-update" name="last-update" required
                   class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
           </div>
-          <button type="submit"
-              class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md">Save</button>
-          <button type="button"
-              onclick="hideAddSensorForm()"
-              class="ml-2 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md">Cancel</button>
+          <div class="flex justify-end">
+              <button type="submit"
+                  class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md">Save</button>
+              <button type="button"
+                  onclick="hideAddSensorForm()"
+                  class="ml-2 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md">Cancel</button>
+          </div>
       </form>
   </div>
 </section>
 
-  <section id="alerts" class="p-4 bg-white rounded-lg shadow-md">
-    <div class="content-header mb-4 flex justify-between items-center bg-gray-400 p-4 rounded-t-lg">
-        <div class="flex items-center">
-            <i class="fas fa-bell text-blue-500 mr-2"></i>
-            <h1 class="text-2xl font-bold">Alerts</h1>
-        </div>
-        <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded" onclick="showCreateAlertForm()">
-            <i class="fas fa-plus mr-2"></i>
-            Create New Alert
-        </button>
-    </div>
-    <div id="create-alert-form" class="bg-gray-100 p-4 rounded mb-4 hidden">
-        <h2 class="text-xl font-semibold mb-2 text-center">Create New Alert</h2>
-        <form id="alert-form" onsubmit="createAlert(event)">
-            <div class="mb-4">
-                <label for="alert-description" class="block text-sm font-medium text-gray-700">Description</label>
-                <input type="text" id="alert-description" name="alert-description" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-            </div>
-            <div class="mb-4">
-                <label for="alert-status" class="block text-sm font-medium text-gray-700">Status</label>
-                <select id="alert-status" name="alert-status" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-                    <option value="active">Active</option>
-                    <option value="resolved">Resolved</option>
-                </select>
-            </div>
-            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md">
-                <i class="fas fa-save mr-2"></i>
-                Submit
-            </button>
-        </form>
-    </div>
-    <div>
+
+<section id="alerts" class="p-6 bg-white rounded-lg shadow-md mb-6">
+  <div class="content-header mb-4 flex justify-between items-center bg-gray-400 p-4 rounded-t-lg">
+      <div class="flex items-center">
+          <i class="fas fa-bell text-blue-500 mr-2"></i>
+          <h1 class="text-2xl font-bold">Alerts</h1>
+      </div>
+      <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded" onclick="showCreateAlertForm()">
+          <i class="fas fa-plus mr-2"></i>
+          Create New Alert
+      </button>
+  </div>
+  <div id="create-alert-form" class="bg-gray-100 p-4 rounded mb-4 hidden">
+      <h2 class="text-xl font-semibold mb-2 text-center">Create New Alert</h2>
+      <form id="alert-form" onsubmit="createAlert(event)">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                  <label for="alert-description" class="block text-sm font-medium text-gray-700">Description:</label>
+                  <input type="text" id="alert-description" name="alert-description"
+                      class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      required>
+              </div>
+              <div>
+                  <label for="alert-status" class="block text-sm font-medium text-gray-700">Status:</label>
+                  <select id="alert-status" name="alert-status"
+                      class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      required>
+                      <option value="active">Active</option>
+                      <option value="resolved">Resolved</option>
+                  </select>
+              </div>
+          </div>
+          <div class="mt-4">
+              <button type="submit"
+                  class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md w-full md:w-auto">
+                  <i class="fas fa-save mr-2"></i>
+                  Submit
+              </button>
+          </div>
+      </form>
+  </div>
+  <div>
       <h2 class="text-3xl font-bold mb-4 text-center">Current Alerts</h2>
-      <table class="min-w-full bg-white border border-gray-200">
-          <thead>
-              <tr class="bg-gray-200">
-                  <th class="py-2 px-4 border-b border-gray-200 text-center">ID</th>
-                  <th class="py-2 px-4 border-b border-gray-200 text-center">Description</th>
-                  <th class="py-2 px-4 border-b border-gray-200 text-center">Status</th>
-                  <th class="py-2 px-4 border-b border-gray-200 text-center">Date</th>
-                  <th class="py-2 px-4 border-b border-gray-200 text-center">Actions</th>
-              </tr>
-          </thead>
-          <tbody id="current-alerts">
-              <!-- Alerts will be dynamically added here -->
-              <tr>
-                  <td class="py-2 px-4 border-b border-gray-200 text-center">1</td>
-                  <td class="py-2 px-4 border-b border-gray-200 text-center">High Temperature</td>
-                  <td class="py-2 px-4 border-b border-gray-200 text-center">
-                      <span class="bg-red-500 text-white px-2 py-1 rounded-full">Active</span>
-                  </td>
-                  <td class="py-2 px-4 border-b border-gray-200 text-center">2024-06-15 10:30</td>
-                  <td class="py-2 px-4 border-b border-gray-200 text-center">
-                      <button class="bg-green-500 hover:bg-green-600 text-white py-1 px-2 rounded-md mr-2">
-                          <i class="fas fa-check"></i>
-                      </button>
-                      <button class="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded-md">
-                          <i class="fas fa-times"></i>
-                      </button>
-                  </td>
-              </tr>
-              <tr>
-                  <td class="py-2 px-4 border-b border-gray-200 text-center">2</td>
-                  <td class="py-2 px-4 border-b border-gray-200 text-center">Low Humidity</td>
-                  <td class="py-2 px-4 border-b border-gray-200 text-center">
-                      <span class="bg-red-500 text-white px-2 py-1 rounded-full">Active</span>
-                  </td>
-                  <td class="py-2 px-4 border-b border-gray-200 text-center">2024-06-15 11:15</td>
-                  <td class="py-2 px-4 border-b border-gray-200 text-center">
-                      <button class="bg-green-500 hover:bg-green-600 text-white py-1 px-2 rounded-md mr-2">
-                          <i class="fas fa-check"></i>
-                      </button>
-                      <button class="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded-md">
-                          <i class="fas fa-times"></i>
-                      </button>
-                  </td>
-              </tr>
-          </tbody>
-      </table>
-      <div class="mt-4">
-          <h2 class="text-3xl font-bold mb-4 text-center">Alert History</h2>
-          <table class="min-w-full bg-white border border-gray-200">
+      <div class="overflow-x-auto">
+          <table class="w-full bg-white border border-gray-200">
               <thead>
-                <tr class="bg-gray-200">
+                  <tr class="bg-gray-200">
                       <th class="py-2 px-4 border-b border-gray-200 text-center">ID</th>
                       <th class="py-2 px-4 border-b border-gray-200 text-center">Description</th>
                       <th class="py-2 px-4 border-b border-gray-200 text-center">Status</th>
@@ -366,51 +395,105 @@
                       <th class="py-2 px-4 border-b border-gray-200 text-center">Actions</th>
                   </tr>
               </thead>
-              <tbody id="alert-history">
-                  <!-- Alert history will be dynamically added here -->
+              <tbody id="current-alerts">
+                  <!-- Alerts will be dynamically added here -->
                   <tr>
                       <td class="py-2 px-4 border-b border-gray-200 text-center">1</td>
                       <td class="py-2 px-4 border-b border-gray-200 text-center">High Temperature</td>
                       <td class="py-2 px-4 border-b border-gray-200 text-center">
-                          <span class="bg-green-500 text-white px-2 py-1 rounded-full">Resolved</span>
+                          <span class="bg-red-500 text-white px-2 py-1 rounded-full">Active</span>
                       </td>
-                      <td class="py-2 px-4 border-b border-gray-200 text-center">2024-06-15 10:45</td>
+                      <td class="py-2 px-4 border-b border-gray-200 text-center">2024-06-15 10:30</td>
                       <td class="py-2 px-4 border-b border-gray-200 text-center">
-                        <button class="bg-green-500 hover:bg-green-600 text-white py-1 px-2 rounded-md mr-2">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button class="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded-md">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </td>
+                          <button class="bg-green-500 hover:bg-green-600 text-white py-1 px-2 rounded-md mr-2">
+                              <i class="fas fa-check"></i>
+                          </button>
+                          <button class="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded-md">
+                              <i class="fas fa-times"></i>
+                          </button>
+                      </td>
                   </tr>
                   <tr>
                       <td class="py-2 px-4 border-b border-gray-200 text-center">2</td>
                       <td class="py-2 px-4 border-b border-gray-200 text-center">Low Humidity</td>
                       <td class="py-2 px-4 border-b border-gray-200 text-center">
-                          <span class="bg-green-500 text-white px-2 py-1 rounded-full">Resolved</span>
+                          <span class="bg-red-500 text-white px-2 py-1 rounded-full">Active</span>
                       </td>
-                      <td class="py-2 px-4 border-b border-gray-200 text-center">2024-06-15 11:30</td>
+                      <td class="py-2 px-4 border-b border-gray-200 text-center">2024-06-15 11:15</td>
                       <td class="py-2 px-4 border-b border-gray-200 text-center">
-                        <button class="bg-green-500 hover:bg-green-600 text-white py-1 px-2 rounded-md mr-2">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button class="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded-md">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </td>
+                          <button class="bg-green-500 hover:bg-green-600 text-white py-1 px-2 rounded-md mr-2">
+                              <i class="fas fa-check"></i>
+                          </button>
+                          <button class="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded-md">
+                              <i class="fas fa-times"></i>
+                          </button>
+                      </td>
                   </tr>
               </tbody>
           </table>
       </div>
+      <div class="mt-4">
+          <h2 class="text-3xl font-bold mb-4 text-center">Alert History</h2>
+          <div class="overflow-x-auto">
+              <table class="w-full bg-white border border-gray-200">
+                  <thead>
+                      <tr class="bg-gray-200">
+                          <th class="py-2 px-4 border-b border-gray-200 text-center">ID</th>
+                          <th class="py-2 px-4 border-b border-gray-200 text-center">Description</th>
+                          <th class="py-2 px-4 border-b border-gray-200 text-center">Status</th>
+                          <th class="py-2 px-4 border-b border-gray-200 text-center">Date</th>
+                          <th class="py-2 px-4 border-b border-gray-200 text-center">Actions</th>
+                      </tr>
+                  </thead>
+                  <tbody id="alert-history">
+                      <!-- Alert history will be dynamically added here -->
+                      <tr>
+                          <td class="py-2 px-4 border-b border-gray-200 text-center">1</td>
+                          <td class="py-2 px-4 border-b border-gray-200 text-center">High Temperature</td>
+                          <td class="py-2 px-4 border-b border-gray-200 text-center">
+                              <span class="bg-green-500 text-white px-2 py-1 rounded-full">Resolved</span>
+                          </td>
+                          <td class="py-2 px-4 border-b border-gray-200 text-center">2024-06-15 10:45</td>
+                          <td class="py-2 px-4 border-b border-gray-200 text-center">
+                              <button class="bg-green-500 hover:bg-green-600 text-white py-1 px-2 rounded-md mr-2">
+                                  <i class="fas fa-check"></i>
+                              </button>
+                              <button class="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded-md">
+                                  <i class="fas fa-times"></i>
+                              </button>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td class="py-2 px-4 border-b border-gray-200 text-center">2</td>
+                          <td class="py-2 px-4 border-b border-gray-200 text-center">Low Humidity</td>
+                          <td class="py-2 px-4 border-b border-gray-200 text-center">
+                              <span class="bg-green-500 text-white px-2 py-1 rounded-full">Resolved</span>
+                          </td>
+                          <td class="py-2 px-4 border-b border-gray-200 text-center">2024-06-15 11:30</td>
+                          <td class="py-2 px-4 border-b border-gray-200 text-center">
+                              <button class="bg-green-500 hover:bg-green-600 text-white py-1 px-2 rounded-md mr-2">
+                                  <i class="fas fa-check"></i>
+                              </button>
+                              <button class="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded-md">
+                                  <i class="fas fa-times"></i>
+                              </button>
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
   </div>
 </section>
-<section id="history" class="p-4 bg-white rounded-lg shadow-md">
+
+
+<section id="history" class="p-4 bg-white rounded-lg shadow-md mb-6">
   <div class="content-header mb-4">
     <h1 class="text-3xl font-bold text-gray-800 mb-2">Sensor Data: Humidity and Temperature</h1>
     <p class="text-lg text-gray-600">Real-time monitoring of environmental conditions</p>
   </div>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Office Room Sensor Card -->
     <div class="sensor-card bg-gray-100 rounded-lg p-6 shadow-md">
       <h2 class="text-xl font-semibold text-gray-800 mb-4">Office Room</h2>
       <p class="text-lg text-gray-600 mb-4">Sensor ID: SNSR001</p>
@@ -428,9 +511,10 @@
           <p id="heat-index-1" class="text-2xl text-gray-900">27°C</p>
         </div>
       </div>
-      <button class="mt-4 p-2 bg-blue-500 text-white rounded" onclick="showModal('officeRoomModal')">View History</button>
+      <button class="mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400" onclick="showModal('officeRoomModal')">View History</button>
     </div>
 
+    <!-- Living Room Sensor Card -->
     <div class="sensor-card bg-gray-100 rounded-lg p-6 shadow-md">
       <h2 class="text-xl font-semibold text-gray-800 mb-4">Living Room</h2>
       <p class="text-lg text-gray-600 mb-4">Sensor ID: SNSR002</p>
@@ -448,9 +532,10 @@
           <p id="heat-index-2" class="text-2xl text-gray-900">24°C</p>
         </div>
       </div>
-      <button class="mt-4 p-2 bg-blue-500 text-white rounded" onclick="showModal('livingRoomModal')">View History</button>
+      <button class="mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400" onclick="showModal('livingRoomModal')">View History</button>
     </div>
 
+    <!-- Kitchen Sensor Card -->
     <div class="sensor-card bg-gray-100 rounded-lg p-6 shadow-md">
       <h2 class="text-xl font-semibold text-gray-800 mb-4">Kitchen</h2>
       <p class="text-lg text-gray-600 mb-4">Sensor ID: SNSR003</p>
@@ -468,170 +553,211 @@
           <p id="heat-index-3" class="text-2xl text-gray-900">30°C</p>
         </div>
       </div>
-      <button class="mt-4 p-2 bg-blue-500 text-white rounded" onclick="showModal('kitchenModal')">View History</button>
+      <button class="mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400" onclick="showModal('kitchenModal')">View History</button>
     </div>
   </div>
 </section>
 
 <!-- Modals -->
-<div id="officeRoomModal" class="modal hidden fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center">
-  <div class="bg-white rounded-lg p-4 w-3/4">
-    <h2 class="text-2xl font-bold mb-4">Office Room History</h2>
-    <canvas id="officeRoomChart"></canvas>
-    <button class="mt-4 p-2 bg-red-500 text-white rounded" onclick="closeModal('officeRoomModal')">Close</button>
+<!-- Office Room Modal -->
+<div id="officeRoomModal" class="modal fixed hidden inset-0 overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" aria-hidden="true"></div>
+
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+      <div class="bg-white rounded-lg p-4">
+        <h2 class="text-2xl font-bold mb-4">Office Room History</h2>
+        <canvas id="officeRoomChart"></canvas>
+        <button class="mt-4 p-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" onclick="closeModal('officeRoomModal')">Close</button>
+      </div>
+    </div>
   </div>
 </div>
 
-<div id="livingRoomModal" class="modal hidden fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center">
-  <div class="bg-white rounded-lg p-4 w-3/4">
-    <h2 class="text-2xl font-bold mb-4">Living Room History</h2>
-    <canvas id="livingRoomChart"></canvas>
-    <button class="mt-4 p-2 bg-red-500 text-white rounded" onclick="closeModal('livingRoomModal')">Close</button>
+<!-- Living Room Modal -->
+<div id="livingRoomModal" class="modal fixed hidden inset-0 overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" aria-hidden="true"></div>
+
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+      <div class="bg-white rounded-lg p-4">
+        <h2 class="text-2xl font-bold mb-4">Living Room History</h2>
+        <canvas id="livingRoomChart"></canvas>
+        <button class="mt-4 p-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" onclick="closeModal('livingRoomModal')">Close</button>
+      </div>
+    </div>
   </div>
 </div>
 
-<div id="kitchenModal" class="modal hidden fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center">
-  <div class="bg-white rounded-lg p-4 w-3/4">
-    <h2 class="text-2xl font-bold mb-4">Kitchen History</h2>
-    <canvas id="kitchenChart"></canvas>
-    <button class="mt-4 p-2 bg-red-500 text-white rounded" onclick="closeModal('kitchenModal')">Close</button>
+<!-- Kitchen Modal -->
+<div id="kitchenModal" class="modal fixed hidden inset-0 overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" aria-hidden="true"></div>
+
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+      <div class="bg-white rounded-lg p-4">
+        <h2 class="text-2xl font-bold mb-4">Kitchen History</h2>
+        <canvas id="kitchenChart"></canvas>
+        <button class="mt-4 p-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" onclick="closeModal('kitchenModal')">Close</button>
+      </div>
+    </div>
   </div>
 </div>
 
 
-<section id="settings" class="p-6 bg-white rounded-lg shadow-md">
+<section id="settings" class="p-6 bg-white rounded-lg shadow-md mb-6">
   <div class="content-header mb-6">
-      <h1 class="text-4xl font-extrabold text-gray-800">Settings</h1>
+    <h1 class="text-4xl font-extrabold text-gray-800">Settings</h1>
   </div>
-  
+
   <div class="mb-6">
-      <h2 class="text-2xl font-semibold text-gray-700 mb-4">User Preferences</h2>
-      <form>
-          <div class="mb-4">
-              <label for="theme" class="block text-lg font-medium text-gray-800">Theme</label>
-              <select id="theme" name="theme" onchange="updateTheme()" class="mt-2 block w-full py-2 px-3 border border-gray-300 bg-gray-50 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-base">
-                  <option value="light">Light</option>
-                  <option value="dark">Dark</option>
-              </select>
-          </div>
-          <div class="mb-4">
-              <label for="notifications" class="block text-lg font-medium text-gray-800">Notifications</label>
-              <input type="checkbox" id="notifications" name="notifications" checked class="mt-2 rounded-md focus:ring-indigo-500">
-          </div>
-          <button type="button" onclick="savePreferences()" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">Save Preferences</button>
-      </form>
+    <h2 class="text-2xl font-semibold text-gray-700 mb-4">User Preferences</h2>
+    <form>
+      <div class="mb-4">
+        <label for="theme" class="block text-lg font-medium text-gray-800">Theme</label>
+        <select id="theme" name="theme" onchange="updateTheme()" class="mt-2 block w-full py-2 px-3 border border-gray-300 bg-gray-50 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-base">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center">
+          <input type="checkbox" id="notifications" name="notifications" checked class="mr-2 rounded focus:ring-indigo-500">
+          <label for="notifications" class="text-lg font-medium text-gray-800">Notifications</label>
+        </div>
+      </div>
+      <button type="button" onclick="savePreferences()" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">Save Preferences</button>
+    </form>
   </div>
-  
+
   <div class="mb-6">
-      <h2 class="text-2xl font-semibold text-gray-700 mb-4">System Settings</h2>
-      <form>
-          <div class="mb-4">
-              <label for="refresh-rate" class="block text-lg font-medium text-gray-800">Data Refresh Rate (seconds)</label>
-              <input type="number" id="refresh-rate" name="refresh-rate" min="1" value="60" class="mt-2 block w-full py-2 px-3 border border-gray-300 bg-gray-50 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-base">
-          </div>
-          <div class="mb-4">
-              <label for="sensor-calibration" class="block text-lg font-medium text-gray-800">Sensor Calibration</label>
-              <input type="text" id="sensor-calibration" name="sensor-calibration" class="mt-2 block w-full py-2 px-3 border border-gray-300 bg-gray-50 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-base">
-          </div>
-          <button type="button" onclick="saveSystemSettings()" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">Save Settings</button>
-      </form>
+    <h2 class="text-2xl font-semibold text-gray-700 mb-4">System Settings</h2>
+    <form>
+      <div class="mb-4">
+        <label for="refresh-rate" class="block text-lg font-medium text-gray-800">Data Refresh Rate (seconds)</label>
+        <input type="number" id="refresh-rate" name="refresh-rate" min="1" value="60" class="mt-2 block w-full py-2 px-3 border border-gray-300 bg-gray-50 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-base">
+      </div>
+      <div class="mb-4">
+        <label for="sensor-calibration" class="block text-lg font-medium text-gray-800">Sensor Calibration</label>
+        <input type="text" id="sensor-calibration" name="sensor-calibration" class="mt-2 block w-full py-2 px-3 border border-gray-300 bg-gray-50 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-base">
+      </div>
+      <button type="button" onclick="saveSystemSettings()" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">Save Settings</button>
+    </form>
   </div>
-  
+
   <div>
-      <h2 class="text-2xl font-semibold text-gray-700 mb-4">User Management</h2>
-      <table class="w-full border-collapse">
-          <thead>
-              <tr class="bg-gray-100">
-                  <th class="py-3 px-4 border-b border-gray-300 text-left text-gray-800">Username</th>
-                  <th class="py-3 px-4 border-b border-gray-300 text-left text-gray-800">Role</th>
-                  <th class="py-3 px-4 border-b border-gray-300 text-center text-gray-800">Actions</th>
-              </tr>
-          </thead>
-          <tbody id="user-management">
-              <!-- Example user data -->
-              <tr>
-                  <td class="py-3 px-4 border-b border-gray-300 text-gray-700">admin</td>
-                  <td class="py-3 px-4 border-b border-gray-300 text-gray-700">Administrator</td>
-                  <td class="py-3 px-4 border-b border-gray-300 text-center">
-                      <button class="bg-indigo-600 hover:bg-indigo-700 text-white py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 edit-user">Edit</button>
-                      <button class="bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded-md ml-2 focus:outline-none focus:ring-2 focus:ring-red-500 delete-user">Delete</button>
-                  </td>
-              </tr>
-              <!-- More user data goes here -->
-              <tr>
-                  <td class="py-3 px-4 border-b border-gray-300 text-gray-700">user123</td>
-                  <td class="py-3 px-4 border-b border-gray-300 text-gray-700">Standard User</td>
-                  <td class="py-3 px-4 border-b border-gray-300 text-center">
-                      <button class="bg-indigo-600 hover:bg-indigo-700 text-white py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 edit-user">Edit</button>
-                      <button class="bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded-md ml-2 focus:outline-none focus:ring-2 focus:ring-red-500 delete-user">Delete</button>
-                  </td>
-              </tr>
-          </tbody>
+    <h2 class="text-2xl font-semibold text-gray-700 mb-4">User Management</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse border border-gray-200">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="py-3 px-4 border-b border-gray-300 text-left text-lg font-medium text-gray-800">Username</th>
+            <th class="py-3 px-4 border-b border-gray-300 text-left text-lg font-medium text-gray-800">Role</th>
+            <th class="py-3 px-4 border-b border-gray-300 text-center text-lg font-medium text-gray-800">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="user-management">
+          <!-- Example user data -->
+          <tr class="border-b border-gray-200">
+            <td class="py-3 px-4 text-lg text-gray-700">admin</td>
+            <td class="py-3 px-4 text-lg text-gray-700">Administrator</td>
+            <td class="py-3 px-4 text-center">
+              <button class="bg-indigo-600 hover:bg-indigo-700 text-white py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 edit-user">Edit</button>
+              <button class="bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded-md ml-2 focus:outline-none focus:ring-2 focus:ring-red-500 delete-user">Delete</button>
+            </td>
+          </tr>
+          <!-- More user data goes here -->
+          <tr class="border-b border-gray-200">
+            <td class="py-3 px-4 text-lg text-gray-700">user123</td>
+            <td class="py-3 px-4 text-lg text-gray-700">Standard User</td>
+            <td class="py-3 px-4 text-center">
+              <button class="bg-indigo-600 hover:bg-indigo-700 text-white py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 edit-user">Edit</button>
+              <button class="bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded-md ml-2 focus:outline-none focus:ring-2 focus:ring-red-500 delete-user">Delete</button>
+            </td>
+          </tr>
+        </tbody>
       </table>
+    </div>
   </div>
 </section>
+
 
   <!-- Modal for Edit User -->
   <div id="editUserModal" class="fixed inset-0 z-10 hidden overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 transition-opacity">
-            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-        </div>
-        <!-- This element is to trick the browser into centering the modal contents. -->
-        <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>&#8203;
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <!-- Modal content -->
-            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div class="sm:flex sm:items-start">
-                    <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Edit User</h3>
-                        <div class="mt-2">
-                            <form id="editUserForm">
-                                <input type="hidden" id="editUserId">
-                                <div class="mb-2">
-                                    <label for="editUsername" class="block text-lg font-medium text-gray-700">Username:</label>
-                                    <input type="text" id="editUsername" name="editUsername" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" readonly>
-                                </div>
-                                <div class="mb-2">
-                                    <label for="editRole" class="block text-lg font-medium text-gray-700">Role:</label>
-                                    <input type="text" id="editRole" name="editRole" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+      <!-- Background overlay -->
+      <div class="fixed inset-0 transition-opacity">
+        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+      </div>
+  
+      <!-- Modal content -->
+      <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <!-- Modal Header -->
+            <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+              <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Edit User</h3>
+              <div class="mt-2">
+                <!-- Edit User Form -->
+                <form id="editUserForm">
+                  <input type="hidden" id="editUserId">
+                  <div class="mb-2">
+                    <label for="editUsername" class="block text-lg font-medium text-gray-700">Username:</label>
+                    <input type="text" id="editUsername" name="editUsername" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" readonly>
+                  </div>
+                  <div class="mb-2">
+                    <label for="editRole" class="block text-lg font-medium text-gray-700">Role:</label>
+                    <input type="text" id="editRole" name="editRole" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                  </div>
+                </form>
+              </div>
             </div>
-            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button type="button" onclick="saveEditedUser()" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md ml-2">Save</button>
-                <button type="button" onclick="closeEditUserModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md">Cancel</button>
-            </div>
+          </div>
         </div>
+        <!-- Modal Footer -->
+        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <button type="button" onclick="saveEditedUser()" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md ml-2">Save</button>
+          <button type="button" onclick="closeEditUserModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md">Cancel</button>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
+  
 
 <!-- Modal for Delete Confirmation -->
 <div id="deleteConfirmationModal" class="fixed inset-0 z-10 hidden overflow-y-auto">
-    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 transition-opacity">
-            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-        </div>
-        <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div class="sm:flex sm:items-start">
-                    <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Delete User</h3>
-                        <p class="text-gray-700">Are you sure you want to delete this user?</p>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button type="button" onclick="confirmDeleteUser()" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md ml-2">Delete</button>
-                <button type="button" onclick="closeDeleteConfirmationModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md">Cancel</button>
-            </div>
-        </div>
+  <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <!-- Background overlay -->
+    <div class="fixed inset-0 transition-opacity">
+      <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
     </div>
+
+    <!-- Modal content -->
+    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div class="sm:flex sm:items-start">
+          <!-- Modal Header -->
+          <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Delete User</h3>
+            <p class="text-gray-700">Are you sure you want to delete this user?</p>
+          </div>
+        </div>
+      </div>
+      <!-- Modal Footer -->
+      <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+        <button type="button" onclick="confirmDeleteUser()" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md ml-2">Delete</button>
+        <button type="button" onclick="closeDeleteConfirmationModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md">Cancel</button>
+      </div>
+    </div>
+  </div>
 </div>
+
 <script>
   // Edit functionality
   let editUserId = null;
@@ -703,15 +829,16 @@
 <!-- Footer -->
 <footer class="bg-gray-200">
   <div class="container mx-auto py-4 px-6">
-    <div class="flex justify-between items-center">
-      <div class="text-lg font-bold text-gray-700">Contact Information</div>
-      <div class="text-lg font-bold text-gray-700">Help and Support</div>
-      <div class="bg-white shadow-md p-4 rounded-lg text-sm text-gray-600">
-        <div id="date-time" class="text-lg mr-8">Date and Time</div>
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <div class="text-lg font-bold text-gray-700 mb-2 md:mb-0">Contact Information</div>
+      <div class="text-lg font-bold text-gray-700 mb-2 md:mb-0">Help and Support</div>
+      <div class="bg-white shadow-md p-4 rounded-lg text-sm text-gray-600 flex items-center">
+        <div id="date-time" class="text-lg">Date and Time</div>
       </div>
     </div>
   </div>
 </footer>
+
 </div>
     <script src="scripts.js"></script>
 </body>
