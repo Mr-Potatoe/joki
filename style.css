@@ -1,0 +1,17 @@
+#map-view{
+    display: none;}
+
+#sensors{
+    display: none;}
+
+#alerts{
+    display: none;}
+
+#settings{
+    display: none;}
+
+#dashboard{
+    display: block;}
+
+#history{
+    display: none;}
