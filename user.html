@@ -392,56 +392,56 @@
 </section>
 
 <!-- Modals -->
-<!-- Office Room Modal -->
-<div id="officeRoomModal" class="modal fixed hidden inset-0 overflow-y-auto">
-  <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+<div id="officeRoomModal" class="modal fixed hidden inset-0 flex items-center justify-center">
+  <div class="flex items-center justify-center min-h-screen pt-4 px-2 pb-20 text-center sm:block sm:p-0">
     <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" aria-hidden="true"></div>
 
     <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
-    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-      <div class="bg-white rounded-lg p-4">
-        <h2 class="text-2xl font-bold mb-4">Office Room History</h2>
-        <canvas id="officeRoomChart"></canvas>
-        <button class="mt-4 p-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" onclick="closeModal('officeRoomModal')">Close</button>
+    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-full max-w-md sm:max-w-lg md:max-w-2xl">
+      <div class="bg-white rounded-lg p-4 sm:p-6 md:p-8">
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6">Office Room History</h2>
+        <canvas id="officeRoomChart" class="w-full h-auto"></canvas>
+        <button class="mt-4 sm:mt-6 p-2 sm:p-3 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" onclick="closeModal('officeRoomModal')">Close</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Living Room Modal -->
-<div id="livingRoomModal" class="modal fixed hidden inset-0 overflow-y-auto">
-  <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+<div id="livingRoomModal" class="modal fixed hidden inset-0 flex items-center justify-center">
+  <div class="flex items-center justify-center min-h-screen pt-4 px-2 pb-20 text-center sm:block sm:p-0">
     <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" aria-hidden="true"></div>
 
     <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
-    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-      <div class="bg-white rounded-lg p-4">
-        <h2 class="text-2xl font-bold mb-4">Living Room History</h2>
-        <canvas id="livingRoomChart"></canvas>
-        <button class="mt-4 p-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" onclick="closeModal('livingRoomModal')">Close</button>
+    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-full max-w-md sm:max-w-lg md:max-w-2xl">
+      <div class="bg-white rounded-lg p-4 sm:p-6 md:p-8">
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6">Living Room History</h2>
+        <canvas id="livingRoomChart" class="w-full h-auto"></canvas>
+        <button class="mt-4 sm:mt-6 p-2 sm:p-3 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" onclick="closeModal('livingRoomModal')">Close</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Kitchen Modal -->
-<div id="kitchenModal" class="modal fixed hidden inset-0 overflow-y-auto">
-  <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+<div id="kitchenModal" class="modal fixed hidden inset-0 flex items-center justify-center">
+  <div class="flex items-center justify-center min-h-screen pt-4 px-2 pb-20 text-center sm:block sm:p-0">
     <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" aria-hidden="true"></div>
 
     <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
-    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-      <div class="bg-white rounded-lg p-4">
-        <h2 class="text-2xl font-bold mb-4">Kitchen History</h2>
-        <canvas id="kitchenChart"></canvas>
-        <button class="mt-4 p-2 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" onclick="closeModal('kitchenModal')">Close</button>
+    <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-full max-w-md sm:max-w-lg md:max-w-2xl">
+      <div class="bg-white rounded-lg p-4 sm:p-6 md:p-8">
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6">Kitchen History</h2>
+        <canvas id="kitchenChart" class="w-full h-auto"></canvas>
+        <button class="mt-4 sm:mt-6 p-2 sm:p-3 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" onclick="closeModal('kitchenModal')">Close</button>
       </div>
     </div>
   </div>
 </div>
+
 
 
 <section id="settings" class="p-6 bg-white rounded-lg shadow-md mb-6">
