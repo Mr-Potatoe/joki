@@ -32,26 +32,25 @@
     top: calc(100% + 10px); /* Adjust the spacing as needed */
     right: 0;
 }
- 
+
 </style>
 <header class="bg-gray-800 flex justify-between items-center p-4 text-white dark:bg-gray-900">
   <div class="flex items-center">
-      <img src="school-logo.png" alt="School Logo" class="w-12 h-12 mr-4">
-      <div class="text-lg font-bold">ZDSPGC Heat Index Map</div>
+    <img src="school-logo.png" alt="School Logo" class="w-12 h-12 mr-4">
+    <div class="text-lg font-bold">ZDSPGC Heat Index Map</div>
   </div>
   <div class="flex items-center">
-      <button id="menu-toggle" class="sm:hidden flex items-center px-3 py-2 border rounded text-gray-200 border-gray-400 hover:text-white hover:border-white">
-          <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0zM0 9h20v2H0zM0 15h20v2H0z"/></svg>
-      </button>
-      <nav id="menu" class="hidden sm:flex space-x-4">
-          <a href="#dashboard" onclick="showSection('dashboard')" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-          <a href="#map-view" onclick="showSection('map-view')" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Map View</a>
-          <a href="#alerts" onclick="showSection('alerts')" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Alerts</a>
-          <a href="#history" onclick="showSection('history')" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">History</a>
-          <a href="#settings" onclick="showSection('settings')" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Settings</a>
-      </nav>
-      <button id="dark-mode-toggle" onclick="toggleDarkMode()" class="ml-4 p-2 rounded border border-gray-400 hover:bg-gray-700">
-        <i class="fas fa-moon"></i>
+    <button id="menu-toggle" class="sm:hidden flex items-center px-3 py-2 border rounded text-gray-200 border-gray-400 hover:text-white hover:border-white">
+      <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0zM0 9h20v2H0zM0 15h20v2H0z"/></svg>
+    </button>
+    <nav id="menu" class="hidden sm:flex space-x-4">
+      <a href="#dashboard" onclick="showSection('dashboard')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Dashboard</a>
+      <a href="#map-view" onclick="showSection('map-view')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Map View</a>
+      <a href="#alerts" onclick="showSection('alerts')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Alerts</a>
+      <a href="#history" onclick="showSection('history')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">History</a>
+       </nav>
+    <button id="dark-mode-toggle" onclick="toggleDarkMode()" class="ml-4 p-2hover:bg-gray-700 transition duration-300 ease-in-out">
+      <i class="fas fa-moon text-gray-400 hover:text-white transition duration-300 ease-in-out"></i>
     </button>
   </div>
 </header>
@@ -71,8 +70,7 @@
       <a href="#map-view" onclick="showSection('map-view')" class="block text-white px-4 py-2 hover:bg-gray-700">Map View</a>
       <a href="#alerts" onclick="showSection('alerts')" class="block text-white px-4 py-2 hover:bg-gray-700">Alerts</a>
       <a href="#history" onclick="showSection('history')" class="block text-white px-4 py-2 hover:bg-gray-700">History</a>
-      <a href="#settings" onclick="showSection('settings')" class="block text-white px-4 py-2 hover:bg-gray-700">Settings</a>
-  </nav>
+    </nav>
 </div>
 
 
@@ -449,33 +447,6 @@
 
 </div>
 
-
-
-<section id="settings" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6">
-  <div class="content-header mb-6">
-    <h1 class="text-4xl font-extrabold text-gray-800 dark:text-white">Settings</h1>
-  </div>
-
-  <div class="mb-6">
-    <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-4">User Preferences</h2>
-    <form>
-      <div class="mb-4">
-        <label for="theme" class="block text-lg font-medium text-gray-800 dark:text-gray-300">Theme</label>
-        <select id="theme" name="theme"  class="mt-2 block w-full py-2 px-3 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-base dark:text-gray-300">
-          <option value="light">Light</option>
-          <option value="darks">Dark</option>
-        </select>
-      </div>
-      <div class="mb-4">
-        <div class="flex items-center">
-          <input type="checkbox" id="notifications" name="notifications" checked class="mr-2 rounded focus:ring-indigo-500 dark:focus:ring-indigo-400">
-          <label for="notifications" class="text-lg font-medium text-gray-800 dark:text-gray-300">Notifications</label>
-        </div>
-      </div>
-      <button type="button" onclick="savePreferences()" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400">Save Preferences</button>
-    </form>
-  </div>
-</section>
 
 
 </main>
