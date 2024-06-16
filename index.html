@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <style>
   html {
@@ -31,21 +32,7 @@
     top: calc(100% + 10px); /* Adjust the spacing as needed */
     right: 0;
 }
- /* Transition for dark mode toggle button */
- #dark-mode-toggle {
-    transition: background-color 0.3s, color 0.3s;
-  }
 
-  /* Dark mode styles */
-  .dark #dark-mode-toggle {
-    background-color: #4a5568;
-    color: #cbd5e0;
-  }
-
-  .dark #dark-mode-toggle:hover {
-    background-color: #2d3748;
-    color: #ffffff;
-  }
  
 </style>
 <body class="bg-white dark:bg-gray-900 text-black dark:text-white">
@@ -59,19 +46,18 @@
         <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0zM0 9h20v2H0zM0 15h20v2H0z"/></svg>
       </button>
       <nav id="menu" class="hidden sm:flex space-x-4">
-        <a href="#dashboard" onclick="showSection('dashboard')" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-        <a href="#map-view" onclick="showSection('map-view')" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Map View</a>
-        <a href="#sensors" onclick="showSection('sensors')" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Sensors</a>
-        <a href="#alerts" onclick="showSection('alerts')" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Alerts</a>
-        <a href="#history" onclick="showSection('history')" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">History</a>
-        <a href="#settings" onclick="showSection('settings')" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Settings</a>
+        <a href="#dashboard" onclick="showSection('dashboard')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Dashboard</a>
+        <a href="#map-view" onclick="showSection('map-view')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Map View</a>
+        <a href="#sensors" onclick="showSection('sensors')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Sensors</a>
+        <a href="#alerts" onclick="showSection('alerts')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Alerts</a>
+        <a href="#history" onclick="showSection('history')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">History</a>
+        <a href="#settings" onclick="showSection('settings')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Settings</a>
       </nav>
-      <button id="dark-mode-toggle" onclick="toggleDarkMode()" class="ml-4 p-2 rounded border border-gray-400 hover:bg-gray-700">
-        <i class="fas fa-moon"></i>
+      <button id="dark-mode-toggle" class="ml-4 p-2 rounded focus:outline-none transition duration-300 ease-in-out">
+        <i id="dark-mode-icon" class="fas fa-moon text-gray-400 transition duration-300 ease-in-out"></i>
       </button>
     </div>
   </header>
-
 <!-- Sidebar for Mobile Menu -->
 <div id="sidebar" class="fixed inset-0 bg-gray-800 bg-opacity-90 z-50 transform -translate-x-full transition-transform sm:hidden">
   <div class="flex justify-between items-center p-4">
@@ -115,49 +101,49 @@
 
   <div class="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white"> 
   <main class="flex-1 bg-white dark:bg-gray-900 text-black dark:text-white">
-    <section id="dashboard" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6">
+<section id="dashboard" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6">
       <div class="content-header mb-4 flex justify-between items-center flex-wrap">
-          <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-2 sm:mb-0">Overview of Current Conditions</h1>
-          <div class="relative">
-              <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded flex items-center" id="quick-actions-btn">
-                  Quick Actions
-                  <i class="fas fa-caret-down ml-2"></i>
-              </button>
-              <!-- Dropdown menu -->
-              <div class="quick-actions-dropdown bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-md p-4 hidden absolute right-0 mt-2 z-10 w-48">
-                  <ul>
-                      <li>
-                          <a href="#" class="flex items-center py-2 px-4 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                              <svg class="mr-2 text-gray-700 dark:text-gray-300" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13v6h4v-6h5zm-6 1h4v-1h-4v1zm4-8v6h4v-6h5zm-6 8h4v-1h-4v1zm4-6v6h4v-6h5z"></path>
-                              </svg>
-                              Quick Action 1
-                          </a>
-                      </li>
-                      <li>
-                          <a href="#" class="flex items-center py-2 px-4 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                              <svg class="mr-2 text-gray-700 dark:text-gray-300" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13v6h4v-6h5zm-6 1h4v-1h-4v1zm4-8v6h4v-6h5zm-6 8h4v-1h-4v1zm4-6v6h4v-6h5z"></path>
-                              </svg>
-                              Quick Action 2
-                          </a>
-                      </li>
-                      <li>
-                          <a href="#" class="flex items-center py-2 px-4 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                              <svg class="mr-2 text-gray-700 dark:text-gray-300" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13v6h4v-6h5zm-6 1h4v-1h-4v1zm4-8v6h4v-6h5zm-6 8h4v-1h-4v1zm4-6v6h4v-6h5z"></path>
-                              </svg>
-                              Quick Action 3
-                          </a>
-                      </li>
-                  </ul>
-              </div>
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-2 sm:mb-0">Overview of Current Conditions</h1>
+        <div class="relative">
+          <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded flex items-center" id="quick-actions-btn">
+            Quick Actions
+            <i class="fas fa-caret-down ml-2"></i>
+          </button>
+          <!-- Dropdown menu -->
+          <div class="quick-actions-dropdown bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-md p-4 hidden absolute right-0 mt-2 z-10 w-48">
+            <ul>
+              <li>
+                <a href="#" class="flex items-center py-2 px-4 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                  <svg class="mr-2 text-gray-700 dark:text-gray-300" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13v6h4v-6h5zm-6 1h4v-1h-4v1zm4-8v6h4v-6h5zm-6 8h4v-1h-4v1zm4-6v6h4v-6h5z"></path>
+                  </svg>
+                  Quick Action 1
+                </a>
+              </li>
+              <li>
+                <a href="#" class="flex items-center py-2 px-4 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                  <svg class="mr-2 text-gray-700 dark:text-gray-300" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13v6h4v-6h5zm-6 1h4v-1h-4v1zm4-8v6h4v-6h5zm-6 8h4v-1h-4v1zm4-6v6h4v-6h5z"></path>
+                  </svg>
+                  Quick Action 2
+                </a>
+              </li>
+              <li>
+                <a href="#" class="flex items-center py-2 px-4 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                  <svg class="mr-2 text-gray-700 dark:text-gray-300" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13v6h4v-6h5zm-6 1h4v-1h-4v1zm4-8v6h4v-6h5zm-6 8h4v-1h-4v1zm4-6v6h4v-6h5z"></path>
+                  </svg>
+                  Quick Action 3
+                </a>
+              </li>
+            </ul>
           </div>
+        </div>
       </div>
       <div class="w-full h-full">
-          <canvas id="conditionsChart" class="w-full h-full"></canvas>
+        <canvas id="conditionsChart" class="w-full h-full"></canvas>
       </div>
-  </section>
+    </section>
   
 
   
@@ -584,25 +570,6 @@
     <h1 class="text-4xl font-extrabold text-gray-800 dark:text-white">Settings</h1>
   </div>
 
-  <div class="mb-6">
-    <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-4">User Preferences</h2>
-    <form>
-      <div class="mb-4">
-        <label for="theme" class="block text-lg font-medium text-gray-800 dark:text-gray-300">Theme</label>
-        <select id="theme" name="theme" onchange="" class="mt-2 block w-full py-2 px-3 border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-base">
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
-      </div>
-      <div class="mb-4">
-        <div class="flex items-center">
-          <input type="checkbox" id="notifications" name="notifications" checked class="mr-2 rounded focus:ring-indigo-500">
-          <label for="notifications" class="text-lg font-medium text-gray-800 dark:text-gray-300">Notifications</label>
-        </div>
-      </div>
-      <button type="button" onclick="savePreferences()" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">Save Preferences</button>
-    </form>
-  </div>
 
   <div class="mb-6">
     <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-4">System Settings</h2>
@@ -870,7 +837,6 @@
     </div>
   </div>
 </footer>
-
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const darkModeToggle = document.getElementById('dark-mode-toggle');
@@ -879,7 +845,7 @@
 
     // Load dark mode preference from local storage
     if (localStorage.getItem('darkMode') === 'enabled') {
-      enableDarkMode(false); // Load dark mode without transition initially
+      enableDarkMode();
     }
 
     darkModeToggle.addEventListener('click', () => {
@@ -890,21 +856,16 @@
       }
     });
 
-    function enableDarkMode(withTransition = true) {
+
+    function enableDarkMode() {
       body.classList.add(darkModeClass);
       localStorage.setItem('darkMode', 'enabled');
-      if (withTransition) {
-        darkModeToggle.classList.add('transition-colors', 'duration-300');
-      }
       darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Change to sun icon
     }
 
-    function disableDarkMode(withTransition = true) {
+    function disableDarkMode() {
       body.classList.remove(darkModeClass);
       localStorage.setItem('darkMode', 'disabled');
-      if (withTransition) {
-        darkModeToggle.classList.add('transition-colors', 'duration-300');
-      }
       darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>'; // Change to moon icon
     }
 
@@ -917,10 +878,11 @@
       document.getElementById(sectionId).classList.remove('hidden');
     };
   });
-</script>
 
-</div>
-    
-    <script src="scripts.js"></script>
+  
+</script>
+<script src="scripts.js"></script>
+
+</div> 
 </body>
 </html>
