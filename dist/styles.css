@@ -1253,12 +1253,10 @@ video {
 
 /* Add Tailwind CSS classes to define active link styling */
 
-.nav-link.active {
-  --tw-bg-opacity: 1;
-  background-color: rgb(79 70 229 / var(--tw-bg-opacity));
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
-}
+ .nav-link.active {
+    @apply bg-indigo-600 dark:bg-indigo-500 text-white;
+  }
+
 
 .nav-link.active:is(.dark *) {
   --tw-bg-opacity: 1;
