@@ -890,9 +890,9 @@ video {
   border-color: rgb(156 163 175 / var(--tw-border-opacity));
 }
 
-.border-indigo-500 {
+.border-indigo-200 {
   --tw-border-opacity: 1;
-  border-color: rgb(99 102 241 / var(--tw-border-opacity));
+  border-color: rgb(199 210 254 / var(--tw-border-opacity));
 }
 
 .bg-black {
@@ -1251,18 +1251,6 @@ video {
   display: none;
 }
 
-/* Add Tailwind CSS classes to define active link styling */
-
- .nav-link.active {
-    @apply bg-indigo-600 dark:bg-indigo-500 text-white;
-  }
-
-
-.nav-link.active:is(.dark *) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(99 102 241 / var(--tw-bg-opacity));
-}
-
 .hover\:border-white:hover {
   --tw-border-opacity: 1;
   border-color: rgb(255 255 255 / var(--tw-border-opacity));
@@ -1382,6 +1370,11 @@ video {
 .dark\:bg-gray-900:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+}
+
+.dark\:bg-indigo-500:is(.dark *) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(99 102 241 / var(--tw-bg-opacity));
 }
 
 .dark\:bg-opacity-70:is(.dark *) {
@@ -1601,3 +1594,4 @@ video {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
