@@ -29,7 +29,24 @@ setInterval(updateDateTime, 1000);
 
 // Initial call to display the date and time immediately
 updateDateTime();
-
+ // JavaScript to handle active class toggling
+ document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', function() {
+    document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+function showSection(sectionId) {
+  // Remove 'active' class from all nav links
+  document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
+  
+  // Add 'active' class to the clicked nav link
+  const activeNavLink = document.querySelector(`[href="#${sectionId}"]`);
+  activeNavLink.classList.add('active');
+  
+  // Your logic to show the corresponding section goes here
+  // Example: Show or hide sections based on sectionId
+}
 // JavaScript function to handle section navigation
 function showSection(sectionId) {
     document.querySelectorAll('main section').forEach(section => {
@@ -347,3 +364,5 @@ function addSensor(event) {
     // Hide the form after submission
     hideAddSensorForm();
 }
+
+
