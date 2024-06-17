@@ -32,7 +32,9 @@
     top: calc(100% + 10px); /* Adjust the spacing as needed */
     right: 0;
 }
-
+.nav-link.active {
+    @apply bg-indigo-600 dark:bg-indigo-500 text-white;
+  }
 </style>
 <header class="bg-gray-800 flex justify-between items-center p-4 text-white dark:bg-gray-900 border-b-4 border-indigo-200 dark:border-indigo-400 shadow-md">
   <div class="flex items-center">
