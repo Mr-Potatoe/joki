@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 #map-view{
     display: none;}
 
@@ -15,3 +20,9 @@
 
 #history{
     display: none;}
+
+    .nav-link.active {
+        @apply bg-indigo-600 dark:bg-indigo-500 text-white;
+      }
+    
+
