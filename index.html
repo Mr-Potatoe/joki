@@ -33,10 +33,11 @@
     right: 0;
 }
 
- 
+</style>
+
 </style>
 <body class="bg-white dark:bg-gray-900 text-black dark:text-white">
-  <header class="bg-gray-800 flex justify-between items-center p-4 text-white dark:bg-gray-900">
+  <header class="bg-gray-800 dark:bg-gray-900 border-b-4 border-indigo-500 dark:border-indigo-400 shadow-md flex justify-between items-center p-4 text-white">
     <div class="flex items-center">
       <img src="school-logo.png" alt="School Logo" class="w-12 h-12 mr-4">
       <div class="text-lg font-bold">ZDSPGC Heat Index Map</div>
@@ -46,18 +47,20 @@
         <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0zM0 9h20v2H0zM0 15h20v2H0z"/></svg>
       </button>
       <nav id="menu" class="hidden sm:flex space-x-4">
-        <a href="#dashboard" onclick="showSection('dashboard')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Dashboard</a>
-        <a href="#map-view" onclick="showSection('map-view')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Map View</a>
-        <a href="#sensors" onclick="showSection('sensors')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Sensors</a>
-        <a href="#alerts" onclick="showSection('alerts')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Alerts</a>
-        <a href="#history" onclick="showSection('history')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">History</a>
-        <a href="#settings" onclick="showSection('settings')" class="nav-link hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Settings</a>
+        <a href="#dashboard" onclick="showSection('dashboard')" class="nav-link hover:bg-indigo-600 dark:hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Dashboard</a>
+        <a href="#map-view" onclick="showSection('map-view')" class="nav-link hover:bg-indigo-600 dark:hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Map View</a>
+        <a href="#sensors" onclick="showSection('sensors')" class="nav-link hover:bg-indigo-600 dark:hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Sensors</a>
+        <a href="#alerts" onclick="showSection('alerts')" class="nav-link hover:bg-indigo-600 dark:hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Alerts</a>
+        <a href="#history" onclick="showSection('history')" class="nav-link hover:bg-indigo-600 dark:hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">History</a>
+        <a href="#settings" onclick="showSection('settings')" class="nav-link hover:bg-indigo-600 dark:hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out">Settings</a>
       </nav>
       <button id="dark-mode-toggle" class="ml-4 p-2 rounded focus:outline-none transition duration-300 ease-in-out">
-        <i id="dark-mode-icon" class="fas fa-moon text-gray-400 transition duration-300 ease-in-out"></i>
+        <i id="dark-mode-icon" class="fas fa-moon text-gray-400 dark:text-gray-200 transition duration-300 ease-in-out"></i>
       </button>
     </div>
   </header>
+  
+  
 <!-- Sidebar for Mobile Menu -->
 <div id="sidebar" class="fixed inset-0 bg-gray-800 bg-opacity-90 z-50 transform -translate-x-full transition-transform sm:hidden">
   <div class="flex justify-between items-center p-4">
@@ -99,8 +102,8 @@
   });
 </script>
 
-  <div class="flex flex-col min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white"> 
-  <main class="flex-1 bg-white dark:bg-gray-900 text-black dark:text-white">
+  <div class="flex flex-col  min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white"> 
+  <main class="flex-1  p-6 bg-gray-200 dark:bg-gray-900 text-black dark:text-white">
 <section id="dashboard" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6">
       <div class="content-header mb-4 flex justify-between items-center flex-wrap">
         <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-2 sm:mb-0">Overview of Current Conditions</h1>
@@ -817,7 +820,7 @@
 </script>
 </main>
 <!-- Footer -->
-<footer class="bg-gray-200 dark:bg-gray-800 text-black dark:text-white">
+<footer class="bg-gray-300 dark:bg-gray-900 text-black shadow-md dark:text-white border-t dark:border-gray-600">
   <div class="container mx-auto py-6 px-6">
     <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
       <div class="flex flex-col md:flex-row items-center md:space-x-8 space-y-4 md:space-y-0">
@@ -829,7 +832,7 @@
           <div id="date-time" class="text-lg">Date and Time</div>
         </div>
         <a href="user.html">
-          <button class="bg-black dark:bg-gray-600 shadow-md p-4 rounded-lg text-sm text-white flex items-center">
+          <button class="bg-black dark:bg-gray-800 shadow-md p-4 rounded-lg text-sm text-white flex items-center">
             User
           </button>
         </a>
@@ -837,6 +840,7 @@
     </div>
   </div>
 </footer>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const darkModeToggle = document.getElementById('dark-mode-toggle');
