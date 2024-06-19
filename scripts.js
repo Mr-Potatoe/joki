@@ -171,8 +171,116 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   });
 
-  
+  // Data for the second location
+  const temperatureData2 = [30, 31, 32, 33, 34, 39, 36, 39, 34, 33, 32, 31, 30, 29, 28, 29, 30, 31, 32, 33, 34, 39, 36, 37];
+  const humidityData2 = [50, 55, 60, 65, 70, 79, 80, 79, 70, 65, 60, 55, 50, 45, 40, 45, 50, 55, 60, 65, 70, 79, 80, 85];
+  const heatIndexData2 = temperatureData2.map((temp, index) => calculateHeatIndex(temp, humidityData2[index]));
+
+  const ctx2 = document.getElementById('conditionsChart2').getContext('2d');
+  const conditionsChart2 = new Chart(ctx2, {
+      type: 'line',
+      data: {
+          labels: labels,
+          datasets: [
+              {
+                  label: 'Temperature (°C)',
+                  data: temperatureData2,
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  yAxisID: 'y-axis-temp',
+                  pointStyle: 'circle',
+                  pointRadius: 5,
+                  pointHoverRadius: 7,
+              },
+              {
+                  label: 'Humidity (%)',
+                  data: humidityData2,
+                  borderColor: 'rgba(153, 102, 255, 1)',
+                  backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                  yAxisID: 'y-axis-humidity',
+                  pointStyle: 'circle',
+                  pointRadius: 5,
+                  pointHoverRadius: 7,
+              },
+              {
+                  label: 'Heat Index (°C)',
+                  data: heatIndexData2,
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  yAxisID: 'y-axis-heatIndex',
+                  pointStyle: 'circle',
+                  pointRadius: 5,
+                  pointHoverRadius: 7,
+              }
+          ]
+      },
+      options: {
+          scales: {
+              yAxes: [
+                  {
+                      id: 'y-axis-temp',
+                      type: 'linear',
+                      position: 'left',
+                      ticks: {
+                          beginAtZero: true
+                      },
+                      scaleLabel: {
+                          display: true,
+                          labelString: 'Temperature (°C)'
+                      }
+                  },
+                  {
+                      id: 'y-axis-humidity',
+                      type: 'linear',
+                      position: 'right',
+                      ticks: {
+                          beginAtZero: true
+                      },
+                      scaleLabel: {
+                          display: true,
+                          labelString: 'Humidity (%)'
+                      }
+                  },
+                  {
+                      id: 'y-axis-heatIndex',
+                      type: 'linear',
+                      position: 'right',
+                      ticks: {
+                          beginAtZero: true
+                      },
+                      scaleLabel: {
+                          display: true,
+                          labelString: 'Heat Index (°C)'
+                      },
+                      gridLines: {
+                          drawOnChartArea: false
+                      }
+                  }
+              ]
+          },
+          tooltips: {
+              mode: 'index',
+              intersect: false,
+          },
+          hover: {
+              mode: 'nearest',
+              intersect: true
+          },
+          legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                  fontColor: '#333',
+                  usePointStyle: true,
+              }
+          },
+          responsive: true,
+          maintainAspectRatio: false
+      }
+  });
+
 });
+
 /* ====================================================================================================== */
 // Include Chart.js library in your HTML file
 // <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
