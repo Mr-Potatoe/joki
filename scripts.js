@@ -55,240 +55,131 @@ function showSection(sectionId) {
 }
 /* ===================================================================================================== */
   // Function to calculate heat index
-  function calculateHeatIndex(tempC, humidity) {
-    const T = tempC * 9/5 + 32; // Convert Celsius to Fahrenheit
-    const R = humidity;
-    const heatIndexF = -42.379 
-      + 2.04901523 * T 
-      + 10.14333127 * R 
-      - 0.22475541 * T * R 
-      - 0.00683783 * Math.pow(T, 2) 
-      - 0.05481717 * Math.pow(R, 2) 
-      + 0.00122874 * Math.pow(T, 2) * R 
-      + 0.00085282 * T * Math.pow(R, 2) 
-      - 0.00000199 * Math.pow(T, 2) * Math.pow(R, 2);
-    const heatIndexC = (heatIndexF - 32) * 5/9; // Convert Fahrenheit back to Celsius
-    return heatIndexC.toFixed(2);
-  }
+function calculateHeatIndex(tempC, humidity) {
+  const T = tempC * 9 / 5 + 32; // Convert Celsius to Fahrenheit
+  const R = humidity;
+  const heatIndexF = -42.379
+    + 2.04901523 * T
+    + 10.14333127 * R
+    - 0.22475541 * T * R
+    - 0.00683783 * Math.pow(T, 2)
+    - 0.05481717 * Math.pow(R, 2)
+    + 0.00122874 * Math.pow(T, 2) * R
+    + 0.00085282 * T * Math.pow(R, 2)
+    - 0.00000199 * Math.pow(T, 2) * Math.pow(R, 2);
+  const heatIndexC = (heatIndexF - 32) * 5 / 9; // Convert Fahrenheit back to Celsius
+  return heatIndexC.toFixed(2);
+}
 
-  // Dashboard chart script function
-  document.addEventListener('DOMContentLoaded', () => {
-    const labels = Array.from({ length: 24 }, (_, i) => `${i}:00`);
-    const temperatureData = [35, 36, 37, 38, 39, 40, 41, 40, 39, 38, 37, 36, 35, 34, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42];
-    const humidityData = [55, 60, 65, 70, 75, 80, 85, 80, 75, 70, 65, 60, 55, 50, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90];
-    const heatIndexData = temperatureData.map((temp, index) => calculateHeatIndex(temp, humidityData[index]));
-
-    const ctx = document.getElementById('conditionsChart').getContext('2d');
-    const conditionsChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: 'Temperature (°C)',
-            data: temperatureData,
-            borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            yAxisID: 'y-axis-temp',
-            pointStyle: 'circle',
-            pointRadius: 5,
-            pointHoverRadius: 7,
-          },
-          {
-            label: 'Humidity (%)',
-            data: humidityData,
-            borderColor: 'rgba(153, 102, 255, 1)',
-            backgroundColor: 'rgba(153, 102, 255, 0.2)',
-            yAxisID: 'y-axis-humidity',
-            pointStyle: 'circle',
-            pointRadius: 5,
-            pointHoverRadius: 7,
-          },
-          {
-            label: 'Heat Index (°C)',
-            data: heatIndexData,
-            borderColor: 'rgba(255, 99, 132, 1)',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            yAxisID: 'y-axis-heatIndex',
-            pointStyle: 'circle',
-            pointRadius: 5,
-            pointHoverRadius: 7,
-          }
-        ]
-      },
-      options: {
-        scales: {
-          yAxes: [
-            {
-              id: 'y-axis-temp',
-              type: 'linear',
-              position: 'left',
-              ticks: {
-                beginAtZero: true
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Temperature (°C)'
-              }
-            },
-            {
-              id: 'y-axis-humidity',
-              type: 'linear',
-              position: 'right',
-              ticks: {
-                beginAtZero: true
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Humidity (%)'
-              }
-            },
-            {
-              id: 'y-axis-heatIndex',
-              type: 'linear',
-              position: 'right',
-              ticks: {
-                beginAtZero: true
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Heat Index (°C)'
-              },
-              gridLines: {
-                drawOnChartArea: false
-              }
-            }
-          ]
-        },
-        tooltips: {
-          mode: 'index',
-          intersect: false,
-        },
-        hover: {
-          mode: 'nearest',
-          intersect: true
-        },
-        legend: {
-          display: true,
-          position: 'top',
-          labels: {
-            fontColor: '#333',
-            usePointStyle: true,
-          }
-        },
-        responsive: true,
-        maintainAspectRatio: false
+// Common chart options
+const chartOptions = {
+  scales: {
+    y: {
+      beginAtZero: true,
+      type: 'linear',
+      position: 'left',
+      title: {
+        display: true,
+        text: 'Temperature (°C)'
       }
-    });
-
-    // Data for the second location
-    const temperatureData2 = [30, 31, 32, 33, 34, 39, 36, 39, 34, 33, 32, 31, 30, 29, 28, 29, 30, 31, 32, 33, 34, 39, 36, 37];
-    const humidityData2 = [50, 55, 60, 65, 70, 79, 80, 79, 70, 65, 60, 55, 50, 45, 40, 45, 50, 55, 60, 65, 70, 79, 80, 85];
-    const heatIndexData2 = temperatureData2.map((temp, index) => calculateHeatIndex(temp, humidityData2[index]));
-
-    const ctx2 = document.getElementById('conditionsChart2').getContext('2d');
-    const conditionsChart2 = new Chart(ctx2, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: 'Temperature (°C)',
-            data: temperatureData2,
-            borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            yAxisID: 'y-axis-temp',
-            pointStyle: 'circle',
-            pointRadius: 5,
-            pointHoverRadius: 7,
-          },
-          {
-            label: 'Humidity (%)',
-            data: humidityData2,
-            borderColor: 'rgba(153, 102, 255, 1)',
-            backgroundColor: 'rgba(153, 102, 255, 0.2)',
-            yAxisID: 'y-axis-humidity',
-            pointStyle: 'circle',
-            pointRadius: 5,
-            pointHoverRadius: 7,
-          },
-          {
-            label: 'Heat Index (°C)',
-            data: heatIndexData2,
-            borderColor: 'rgba(255, 99, 132, 1)',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            yAxisID: 'y-axis-heatIndex',
-            pointStyle: 'circle',
-            pointRadius: 5,
-            pointHoverRadius: 7,
-          }
-        ]
+    },
+    y2: {
+      beginAtZero: true,
+      type: 'linear',
+      position: 'right',
+      title: {
+        display: true,
+        text: 'Humidity (%) / Heat Index (°C)'
       },
-      options: {
-        scales: {
-          yAxes: [
-            {
-              id: 'y-axis-temp',
-              type: 'linear',
-              position: 'left',
-              ticks: {
-                beginAtZero: true
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Temperature (°C)'
-              }
-            },
-            {
-              id: 'y-axis-humidity',
-              type: 'linear',
-              position: 'right',
-              ticks: {
-                beginAtZero: true
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Humidity (%)'
-              }
-            },
-            {
-              id: 'y-axis-heatIndex',
-              type: 'linear',
-              position: 'right',
-              ticks: {
-                beginAtZero: true
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Heat Index (°C)'
-              },
-              gridLines: {
-                drawOnChartArea: false
-              }
-            }
-          ]
-        },
-        tooltips: {
-          mode: 'index',
-          intersect: false,
-        },
-        hover: {
-          mode: 'nearest',
-          intersect: true
-        },
-        legend: {
-          display: true,
-          position: 'top',
-          labels: {
-            fontColor: '#333',
-            usePointStyle: true,
-          }
-        },
-        responsive: true,
-        maintainAspectRatio: false
+      grid: {
+        drawOnChartArea: false // only want the grid lines for one axis to show up
       }
-    });
+    }
+  },
+  tooltips: {
+    mode: 'index',
+    intersect: false
+  },
+  hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  plugins: {
+    legend: {
+      display: true,
+      position: 'top',
+      labels: {
+        fontColor: '#333',
+        usePointStyle: true
+      }
+    }
+  },
+  responsive: true,
+  maintainAspectRatio: false
+};
+
+// Function to create chart
+function createChart(ctx, labels, temperatureData, humidityData, heatIndexData) {
+  return new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Temperature (°C)',
+          data: temperatureData,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          yAxisID: 'y',
+          pointStyle: 'circle',
+          pointRadius: 5,
+          pointHoverRadius: 7
+        },
+        {
+          label: 'Humidity (%)',
+          data: humidityData,
+          borderColor: 'rgba(153, 102, 255, 1)',
+          backgroundColor: 'rgba(153, 102, 255, 0.2)',
+          yAxisID: 'y2',
+          pointStyle: 'circle',
+          pointRadius: 5,
+          pointHoverRadius: 7
+        },
+        {
+          label: 'Heat Index (°C)',
+          data: heatIndexData,
+          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          yAxisID: 'y2',
+          pointStyle: 'circle',
+          pointRadius: 5,
+          pointHoverRadius: 7
+        }
+      ]
+    },
+    options: chartOptions
   });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const labels = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+  
+  // Data for the first location
+  const temperatureData = [35, 36, 37, 38, 39, 40, 41, 40, 39, 38, 37, 36, 35, 34, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42];
+  const humidityData = [55, 60, 65, 70, 75, 80, 85, 80, 75, 70, 65, 60, 55, 50, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90];
+  const heatIndexData = temperatureData.map((temp, index) => calculateHeatIndex(temp, humidityData[index]));
+
+  const ctx1 = document.getElementById('conditionsChart').getContext('2d');
+  createChart(ctx1, labels, temperatureData, humidityData, heatIndexData);
+
+  // Data for the second location
+  const temperatureData2 = [30, 31, 32, 33, 34, 39, 36, 39, 34, 33, 32, 31, 30, 29, 28, 29, 30, 31, 32, 33, 34, 39, 36, 37];
+  const humidityData2 = [50, 55, 60, 65, 70, 79, 80, 79, 70, 65, 60, 55, 50, 45, 40, 45, 50, 55, 60, 65, 70, 79, 80, 85];
+  const heatIndexData2 = temperatureData2.map((temp, index) => calculateHeatIndex(temp, humidityData2[index]));
+
+  const ctx2 = document.getElementById('conditionsChart2').getContext('2d');
+  createChart(ctx2, labels, temperatureData2, humidityData2, heatIndexData2);
+});
 /* ====================================================================================================== */
 // Include Chart.js library in your HTML file
 // <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
