@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <head>
-     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">   
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heat Index Map</title>
     <link rel="stylesheet" href="dist/styles.css">
     <link rel="icon" href="school-logo.png" type="image/png">
@@ -33,6 +33,9 @@
     right: 0;
 }
 
+.alert-toggle-button.active {
+    background-color: #4f46e5; /* Adjust this to match your active button color */
+  }
 
 </style>
 <!-- body class -->
@@ -73,10 +76,10 @@
   <nav class="mt-8">
       <a href="#dashboard" onclick="showSection('dashboard')" class="block text-white px-4 py-2 hover:bg-gray-700">Dashboard</a>
       <a href="#map-view" onclick="showSection('map-view')" class="block text-white px-4 py-2 hover:bg-gray-700">Map View</a>
-     <!-- <a href="#sensors" onclick="showSection('sensors')" class="block text-white px-4 py-2 hover:bg-gray-700">Sensors</a> -->
+      <a href="#sensors" onclick="showSection('sensors')" class="block text-white px-4 py-2 hover:bg-gray-700">Sensors</a>
       <a href="#alerts" onclick="showSection('alerts')" class="block text-white px-4 py-2 hover:bg-gray-700">Alerts</a>
       <a href="#history" onclick="showSection('history')" class="block text-white px-4 py-2 hover:bg-gray-700">History</a>
-     <!-- <a href="#settings" onclick="showSection('settings')" class="block text-white px-4 py-2 hover:bg-gray-700">Settings</a> -->
+      <a href="#settings" onclick="showSection('settings')" class="block text-white px-4 py-2 hover:bg-gray-700">Settings</a>
   </nav>
 </div>
 <!-- sidebar script -->
@@ -103,7 +106,7 @@
 <!-- div for main content -->
   <div class="flex flex-col  min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white"> 
 <!-- main content -->
-  <main class="flex-1  p-6 bg-gray-200 dark:bg-gray-900 text-black dark:text-white">
+  <main class="flex-1  p-6">
 <!-- dashboard section -->
 <section id="dashboard" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6">
   <div class="content-header mb-4 flex justify-between items-center flex-wrap">
@@ -115,7 +118,7 @@
       </button>
       <!-- Dropdown menu -->
       <div id="quick-actions-dropdown" class="quick-actions-dropdown bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-md p-4 hidden absolute right-0 mt-2 z-10 w-48" aria-labelledby="quick-actions-btn">
-        <ul> 
+        <ul>
           <li>
             <a href="#alerts" onclick="showSection('alerts'); closeQuickActions();" class="quick-action-item flex items-center py-2 px-4 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
               <i class="fas fa-bell mr-2 text-gray-700 dark:text-gray-300"></i>
@@ -132,8 +135,27 @@
       </div>
     </div>
   </div>
-  <div class="w-full h-full bg-slate-200 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
-    <canvas id="conditionsChart" class="w-full h-full"></canvas>
+  <div class="flex flex-wrap -mx-3 h-full">
+    <div class="w-full md:w-1/2 px-3 mb-6 h-full">
+      <div class="h-full bg-slate-200 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+        <div class="p-4">
+          <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-2">BSIS Building</h2>
+        </div>
+        <div class="h-full overflow-y-auto">
+          <canvas id="conditionsChart" class="w-full h-full"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="w-full md:w-1/2 px-3 mb-6 h-full">
+      <div class="h-full bg-slate-200 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+        <div class="p-4">
+          <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Farmers Hall</h2>
+        </div>
+        <div class="h-full overflow-y-auto">
+          <canvas id="conditionsChart2" class="w-full h-full"></canvas>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
  <!-- Map View Section  -->
@@ -200,7 +222,7 @@
     // Add some sample markers
     var markers = [
         { lat: 51.5, lng: -0.09, status: 'safe' },
-        { lat: 51.51, lng: -0.1, status: 'caution' },
+        // { lat: 51.51, lng: -0.1, status: 'caution' },
         { lat: 51.49, lng: -0.08, status: 'danger' }
     ];
 
@@ -269,75 +291,228 @@
 </script>
 <!-- alerts section -->
 <section id="alerts" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6">
+  <!-- Content Header with Title and Toggle Buttons -->
   <div class="content-header mb-4 flex justify-between items-center bg-gray-400 dark:bg-gray-700 p-4 rounded-t-lg">
-      <div class="flex items-center">
-          <i class="fas fa-bell text-blue-500 mr-2"></i>
-          <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Alerts</h1>
-      </div>
-      
+    <div class="flex items-center">
+      <i class="fas fa-bell text-blue-500 mr-2"></i>
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Alerts</h1>
+    </div>
+    <div class="flex items-center">
+      <button id="show-current-alerts" data-type="current" class="alert-toggle-button bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded mr-2 active">Current Alerts</button>
+      <button id="show-alert-history" data-type="history" class="alert-toggle-button bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded">Alert History</button>
+    </div>
   </div>
-  <div>
-      <h2 class="text-3xl font-bold mb-4 text-center text-gray-800 dark:text-white">Current Alerts</h2>
-      <div class="overflow-x-auto">
-          <table class="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
-              <thead>
-                  <tr class="bg-gray-200 dark:bg-gray-700">
-                      <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">ID</th>
-                      <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">Description</th>
-                      <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">Status</th>
-                      <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">Date</th>
-                         </tr>
-              </thead>
-              <tbody id="current-alerts">
-                  <!-- Alerts will be dynamically added here -->
-                  <tr>
-                      <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">SNSR001</td>
-                      <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">High Heat Index</td>
-                      <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center">
-                          <span class="bg-red-500 text-white px-2 py-1 rounded-full">Active</span>
-                      </td>
-                      <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">2024-06-15 10:30</td>
-                           </tr>
-                  <tr>
-                      <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">SNSR002</td>
-                      <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">High Heat Index</td>
-                      <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center">
-                          <span class="bg-red-500 text-white px-2 py-1 rounded-full">Active</span>
-                      </td>
-                      <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">2024-06-15 11:15</td>
-                         </tr>
-              </tbody>
-          </table>
-      </div>
-      <div class="mt-4">
-          <h2 class="text-3xl font-bold mb-4 text-center text-gray-800 dark:text-white">Alert History</h2>
-          <div class="overflow-x-auto">
-              <table class="w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
-                  <thead>
-                      <tr class="bg-gray-200 dark:bg-gray-700">
-                          <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">ID</th>
-                          <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">Description</th>
-                          <th class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">Date</th>
-                             </tr>
-                  </thead>
-                  <tbody id="alert-history">
-                      <!-- Alert history will be dynamically added here -->
-                      <tr>
-                          <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">SNSR001</td>
-                          <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">High Heat Index</td>
-                          <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">2024-06-15 10:45</td>
-                      </tr>
-                      <tr>
-                          <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">SNSR002</td>
-                          <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">High Heat Index</td>
-                          <td class="py-2 px-4 border-b border-gray-200 dark:border-gray-700 text-center text-gray-800 dark:text-gray-200">2024-06-15 11:30</td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
-      </div>
+
+  <!-- Current Alerts Section -->
+  <div id="current-alerts-section" class="alert-section">
+    <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Current Alerts</h2>
+    <div class="table-container overflow-x-auto">
+      <table class="min-w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm divide-y divide-gray-200">
+        <thead>
+          <tr class="bg-gray-100 dark:bg-gray-700">
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider">ID</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider">Description</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider">Location</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider">Date</th>
+          </tr>
+        </thead>
+        <tbody id="current-alerts-table">
+          <!-- Example of many rows -->
+          <!-- Rows will be dynamically added based on the current page -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination Buttons for Current Alerts -->
+    <div class="flex justify-end mt-4">
+      <button id="prevPageCurrent" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded mr-2" disabled>Prev</button>
+      <button id="nextPageCurrent" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded">Next</button>
+    </div>
+  </div>
+
+  <!-- Alert History Section (Initially Hidden) -->
+  <div id="alert-history-section" class="hidden">
+    <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Alert History</h2>
+    <div class="table-container overflow-x-auto">
+      <table class="min-w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm divide-y divide-gray-200">
+        <thead>
+          <tr class="bg-gray-100 dark:bg-gray-700">
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider">ID</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider">Description</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider">Location</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider">Date</th>
+          </tr>
+        </thead>
+        <tbody id="alert-history-table">
+          <!-- Example of many rows -->
+          <!-- Rows will be dynamically added based on the current page -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination Buttons for Alert History -->
+    <div class="flex justify-end mt-4">
+      <button id="prevPageHistory" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded mr-2" disabled>Prev</button>
+      <button id="nextPageHistory" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded">Next</button>
+    </div>
   </div>
 </section>
+<!-- JavaScript for toggling between Current Alerts and Alert History, and pagination -->
+<script>
+  // Sample data for pagination
+  const currentAlertsData = [
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:30' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:15' },
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:30' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:15' },
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:30' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:15' },
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:30' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:15' },
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:30' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:15' },
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:30' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:15' },
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:30' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:15' },
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:30' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:15' },
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:30' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:15' },
+    // Add more data as needed
+  ];
+
+  const alertHistoryData = [
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:45' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:30' },
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:45' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:30' },
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:45' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:30' },
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:45' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:30' },
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:45' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:30' },
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:45' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:30' },
+    { id: 'SNSR001', description: 'High Heat Index', location: 'BSIS Building', date: '2024-06-15 10:45' },
+    { id: 'SNSR002', description: 'High Heat Index', location: 'Farmers Hall', date: '2024-06-15 11:30' },
+    // Add more data as needed
+  ];
+
+
+  // Variables for pagination
+  const itemsPerPage = 5; // Number of items per page
+  let currentAlertsPage = 1;    // Current page index for current alerts
+  let alertHistoryPage = 1;     // Current page index for alert history
+
+  // Function to render current alerts table based on current page
+  function renderCurrentAlertsTable(page) {
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedData = currentAlertsData.slice(startIndex, endIndex);
+
+    const currentAlertsTable = document.getElementById('current-alerts-table');
+    currentAlertsTable.innerHTML = ''; // Clear existing rows
+
+    paginatedData.forEach((item) => {
+      const row = document.createElement('tr');
+      row.classList.add('bg-white', 'dark:bg-gray-800', 'hover:bg-gray-50', 'dark:hover:bg-gray-700');
+      row.innerHTML = `
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">${item.id}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">${item.description}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">${item.location}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">${item.date}</td>
+      `;
+      currentAlertsTable.appendChild(row);
+    });
+
+    // Enable/disable pagination buttons based on current page
+    const prevPageButton = document.getElementById('prevPageCurrent');
+    const nextPageButton = document.getElementById('nextPageCurrent');
+    prevPageButton.disabled = page === 1;
+    nextPageButton.disabled = endIndex >= currentAlertsData.length;
+  }
+
+  // Function to render alert history table based on current page
+  function renderAlertHistoryTable(page) {
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedData = alertHistoryData.slice(startIndex, endIndex);
+
+    const alertHistoryTable = document.getElementById('alert-history-table');
+    alertHistoryTable.innerHTML = ''; // Clear existing rows
+
+    paginatedData.forEach((item) => {
+      const row = document.createElement('tr');
+      row.classList.add('bg-white', 'dark:bg-gray-800', 'hover:bg-gray-50', 'dark:hover:bg-gray-700');
+      row.innerHTML = `
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">${item.id}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">${item.description}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">${item.location}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">${item.date}</td>
+      `;
+      alertHistoryTable.appendChild(row);
+    });
+
+    // Enable/disable pagination buttons based on current page
+    const prevPageButton = document.getElementById('prevPageHistory');
+    const nextPageButton = document.getElementById('nextPageHistory');
+    prevPageButton.disabled = page === 1;
+    nextPageButton.disabled = endIndex >= alertHistoryData.length;
+  }
+
+  // Initial render of current alerts and alert history tables
+  renderCurrentAlertsTable(currentAlertsPage);
+  renderAlertHistoryTable(alertHistoryPage);
+
+  // Pagination event listeners for current alerts
+  document.getElementById('prevPageCurrent').addEventListener('click', () => {
+    if (currentAlertsPage > 1) {
+      currentAlertsPage--;
+      renderCurrentAlertsTable(currentAlertsPage);
+    }
+  });
+
+  document.getElementById('nextPageCurrent').addEventListener('click', () => {
+    const totalItems = currentAlertsData.length;
+    if (currentAlertsPage < Math.ceil(totalItems / itemsPerPage)) {
+      currentAlertsPage++;
+      renderCurrentAlertsTable(currentAlertsPage);
+    }
+  });
+
+  // Pagination event listeners for alert history
+  document.getElementById('prevPageHistory').addEventListener('click', () => {
+    if (alertHistoryPage > 1) {
+      alertHistoryPage--;
+      renderAlertHistoryTable(alertHistoryPage);
+    }
+  });
+
+  document.getElementById('nextPageHistory').addEventListener('click', () => {
+    const totalItems = alertHistoryData.length;
+    if (alertHistoryPage < Math.ceil(totalItems / itemsPerPage)) {
+      alertHistoryPage++;
+      renderAlertHistoryTable(alertHistoryPage);
+    }
+  });
+
+  // Toggle between Current Alerts and Alert History
+  document.getElementById('show-current-alerts').addEventListener('click', () => {
+    document.getElementById('current-alerts-section').classList.remove('hidden');
+    document.getElementById('alert-history-section').classList.add('hidden');
+    document.getElementById('show-current-alerts').classList.add('active');
+    document.getElementById('show-alert-history').classList.remove('active');
+  });
+
+  document.getElementById('show-alert-history').addEventListener('click', () => {
+    document.getElementById('current-alerts-section').classList.add('hidden');
+    document.getElementById('alert-history-section').classList.remove('hidden');
+    document.getElementById('show-current-alerts').classList.remove('active');
+    document.getElementById('show-alert-history').classList.add('active');
+  });
+</script>
 <!-- History Section -->
  <section id="history" class="p-6 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg shadow-md mb-6">
   <div class="content-header mb-4">
@@ -441,8 +616,7 @@
 </main>
 <!-- end of main content -->
 <!-- Footer -->
-
-<footer class="bg-gray-300 dark:bg-gray-900 text-black shadow-md dark:text-white border-t dark:border-gray-600">
+ <footer class="bg-gray-300 dark:bg-gray-900 text-black shadow-md dark:text-white border-t dark:border-gray-600">
   <div class="container mx-auto py-6 px-6">
     <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">  
       <div class="flex items-center space-x-4">
@@ -504,6 +678,5 @@
 <!-- external script -->
 <script src="scripts.js"></script>
 </div> 
-  
 </body>
 </html>
