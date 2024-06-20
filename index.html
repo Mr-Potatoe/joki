@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Leaflet JS library -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
 <style>
   html {
@@ -39,7 +41,7 @@
 
 </style>
 <!-- body class -->
-<body class="bg-white dark:bg-gray-900 text-black dark:text-white">
+<body class="bg-gray-100 dark:bg-gray-900 text-black dark:text-white">
 <!-- header section -->
   <header class="bg-gray-800 dark:bg-gray-900 border-b-4 border-indigo-200 dark:border-indigo-400 shadow-md flex justify-between items-center p-4 text-white">
     <div class="flex items-center">
@@ -104,11 +106,11 @@
   });
 </script>
 <!-- div for main content -->
-  <div class="flex flex-col  min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white"> 
+  <div class="flex flex-col  min-h-screen bg-gray-100 dark:bg-gray-900 text-black dark:text-white"> 
 <!-- main content -->
-  <main class="flex-1  p-6">
+  <main class="flex-1  p-6 ">
 <!-- dashboard section -->
-<section id="dashboard" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6">
+<section id="dashboard" class="p-6 bg-gray-200 dark:bg-gray-800 rounded-lg shadow-md mb-6">
   <div class="content-header mb-4 flex justify-between items-center flex-wrap">
     <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-2 sm:mb-0">Overview of Current Conditions</h1>
     <div class="relative">
@@ -137,21 +139,21 @@
   </div>
   <div class="flex flex-wrap -mx-3 h-full">
     <div class="w-full md:w-1/2 px-3 mb-6 h-full">
-      <div class="h-full bg-slate-200 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+      <div class="h-full bg-gray-100 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
         <div class="p-4">
-          <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-2">BSIS Building</h2>
+          <h2 class="text-lg font-bold bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white mb-2">BSIS Building</h2>
         </div>
-        <div class="h-full overflow-y-auto">
+        <div class="h-full overflow-y-auto bg-gray-100 dark:bg-gray-700">
           <canvas id="conditionsChart" class="w-full h-full"></canvas>
         </div>
       </div>
     </div>
     <div class="w-full md:w-1/2 px-3 mb-6 h-full">
-      <div class="h-full bg-slate-200 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+      <div class="h-full bg-gray-100 dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden">
         <div class="p-4">
-          <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-2">Farmers Hall</h2>
+          <h2 class="text-lg font-bold  text-gray-800 dark:text-white mb-2">Farmers Hall</h2>
         </div>
-        <div class="h-full overflow-y-auto">
+        <div class="h-full overflow-y-auto bg-gray-100 dark:bg-gray-700">
           <canvas id="conditionsChart2" class="w-full h-full"></canvas>
         </div>
       </div>
@@ -159,7 +161,7 @@
   </div>
 </section>
  <!-- Map View Section  -->
- <section id="map-view" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6">
+ <section id="map-view" class="p-6 bg-gray-200 dark:bg-gray-800 rounded-lg shadow-md mb-6">
   <div class="content-header mb-4 flex justify-between items-center">
       <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Map View</h1>
   </div>
@@ -207,88 +209,97 @@
       <div id="map" class="w-full sm:w-3/4 h-96 bg-gray-300 dark:bg-gray-700 rounded shadow-inner"></div>
   </div>
 </section>
-<!-- Leaflet JS library -->
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <!-- Chart.js library script -->
 <script>
-    // Initialize the map
-    var map = L.map('map').setView([51.505, -0.09], 13);
+  // Initialize the map
+  var map = L.map('map').setView([51.505, -0.09], 13);
 
-    // Add a tile layer to the map
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+  // Add a tile layer to the map
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
 
-    // Add some sample markers
-    var markers = [
-        { lat: 51.5, lng: -0.09, status: 'safe' },
-        // { lat: 51.51, lng: -0.1, status: 'caution' },
-        { lat: 51.49, lng: -0.08, status: 'danger' }
-    ];
+  // Add some sample markers
+  var markers = [
+      { lat: 51.5, lng: -0.09, status: 'safe', description: 'BSIS Building' },
+      { lat: 51.49, lng: -0.08, status: 'danger', description: 'Farmers Hall' }
+  ];
 
-    var markerLayer = L.layerGroup();
+  var markerLayer = L.layerGroup();
 
-    markers.forEach(function(marker) {
-        var color;
-        switch (marker.status) {
-            case 'safe':
-                color = 'green';
-                break;
-            case 'caution':
-                color = 'yellow';
-                break;
-            case 'danger':
-                color = 'red';
-                break;
-            default:
-                color = 'blue';
-        }
-        L.circleMarker([marker.lat, marker.lng], {
-            color: color,
-            radius: 8,
-            fillOpacity: 0.8
-        }).addTo(markerLayer);
-    });
+  markers.forEach(function(marker) {
+      var color, label;
+      switch (marker.status) {
+          case 'safe':
+              color = 'green';
+              label = 'Safe';
+              break;
+          case 'caution':
+              color = 'yellow';
+              label = 'Caution';
+              break;
+          case 'danger':
+              color = 'red';
+              label = 'Danger';
+              break;
+          default:
+              color = 'blue';
+              label = 'Unknown';
+      }
 
-    markerLayer.addTo(map);
+      var markerOptions = {
+          color: color,
+          radius: 8,
+          fillOpacity: 0.8
+      };
 
-    function applyFilters() {
-        // Retrieve filter values
-        var zoneFilter = document.getElementById('zone-filter').value;
-        var sensorStatusFilter = document.getElementById('sensor-status-filter').value;
+      var circleMarker = L.circleMarker([marker.lat, marker.lng], markerOptions).bindPopup(marker.description);
 
-        // Clear existing markers
-        markerLayer.clearLayers();
+      circleMarker.addTo(markerLayer);
+  });
 
-        // Add markers based on filters
-        markers.forEach(function(marker) {
-            if ((zoneFilter === 'all' || marker.status === zoneFilter) &&
-                (sensorStatusFilter === 'all')) { // Update this condition based on your requirements
-                var color;
-                switch (marker.status) {
-                    case 'safe':
-                        color = 'green';
-                        break;
-                    case 'caution':
-                        color = 'yellow';
-                        break;
-                    case 'danger':
-                        color = 'red';
-                        break;
-                    default:
-                        color = 'blue';
-                }
-                L.circleMarker([marker.lat, marker.lng], {
-                    color: color,
-                    radius: 8,
-                    fillOpacity: 0.8
-                }).addTo(markerLayer);
-            }
-        });
+  markerLayer.addTo(map);
 
-        markerLayer.addTo(map);
-    }
+  function applyFilters() {
+      // Retrieve filter values
+      var zoneFilter = document.getElementById('zone-filter').value;
+      var sensorStatusFilter = document.getElementById('sensor-status-filter').value;
+
+      // Clear existing markers
+      markerLayer.clearLayers();
+
+      // Add markers based on filters
+      markers.forEach(function(marker) {
+          if ((zoneFilter === 'all' || marker.status === zoneFilter) &&
+              (sensorStatusFilter === 'all')) {
+              var color;
+              switch (marker.status) {
+                  case 'safe':
+                      color = 'green';
+                      break;
+                  case 'caution':
+                      color = 'yellow';
+                      break;
+                  case 'danger':
+                      color = 'red';
+                      break;
+                  default:
+                      color = 'blue';
+              }
+              var markerOptions = {
+                  color: color,
+                  radius: 8,
+                  fillOpacity: 0.8
+              };
+              var circleMarker = L.circleMarker([marker.lat, marker.lng], markerOptions).bindPopup(marker.description);
+              circleMarker.addTo(markerLayer);
+          }
+      });
+
+      markerLayer.addTo(map);
+  }
 </script>
+
 <!-- alerts section -->
 <section id="alerts" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6">
   <!-- Content Header with Title and Toggle Buttons -->
@@ -514,7 +525,7 @@
   });
 </script>
 <!-- History Section -->
- <section id="history" class="p-6 bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg shadow-md mb-6">
+ <section id="history" class="p-6 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-white rounded-lg shadow-md mb-6">
   <div class="content-header mb-4">
     <h1 class="text-3xl font-bold mb-2">Sensor Data: Humidity and Temperature</h1>
     <p class="text-lg text-gray-600 dark:text-gray-400">Real-time monitoring of environmental conditions</p>
@@ -563,7 +574,7 @@
 </div>
 </section>
 <!-- settings section -->
-<section id="settings" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6">
+<section id="settings" class="p-6 bg-gray-200 dark:bg-gray-800 rounded-lg shadow-md mb-6">
   <div class="content-header mb-6">
     <h1 class="text-4xl font-extrabold text-gray-800 dark:text-white">Settings</h1>
   </div>
@@ -617,7 +628,7 @@
 <!-- end of main content -->
 <!-- Footer -->
  <footer class="bg-gray-300 dark:bg-gray-900 text-black shadow-md dark:text-white border-t dark:border-gray-600">
-  <div class="container mx-auto py-6 px-6">
+  <div class="container mx-auto py-5 px-6">
     <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">  
       <div class="flex items-center space-x-4">
         <div class="bg-white dark:bg-gray-700 shadow-md p-4 rounded-lg text-sm text-gray-600 dark:text-gray-300 flex items-center">
