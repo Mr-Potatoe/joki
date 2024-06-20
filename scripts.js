@@ -1,5 +1,5 @@
 // JavaScript to toggle dashboard dropdown visibility
- document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const quickActionsBtn = document.getElementById('quick-actions-btn');
     const quickActionsDropdown = document.querySelector('.quick-actions-dropdown');
 
@@ -53,8 +53,9 @@ function showSection(sectionId) {
     const target = document.getElementById(sectionId);
     if (target) target.style.display = 'block';
 }
-/* ===================================================================================================== */
-  // Function to calculate heat index
+/* ===================================================================================================== */// 
+// Function to calculate heat index
+// Function to calculate heat index
 function calculateHeatIndex(tempC, humidity) {
   const T = tempC * 9 / 5 + 32; // Convert Celsius to Fahrenheit
   const R = humidity;
@@ -71,16 +72,28 @@ function calculateHeatIndex(tempC, humidity) {
   return heatIndexC.toFixed(2);
 }
 
-// Common chart options
-const chartOptions = {
+// Chart options for dark mode
+const darkChartOptions = {
   scales: {
+    x: {
+      title: {
+        display: true,
+        text: 'Time',
+        color: '#fff' // X-axis title color in dark theme
+      },
+      ticks: {
+        color: '#aaa' // X-axis ticks color in dark theme
+      }
+    },
     y: {
       beginAtZero: true,
       type: 'linear',
       position: 'left',
       title: {
-        display: true,
-        text: 'Temperature (°C)'
+        display: false
+      },
+      ticks: {
+        color: '#aaa' // Y-axis ticks color in dark theme
       }
     },
     y2: {
@@ -88,38 +101,121 @@ const chartOptions = {
       type: 'linear',
       position: 'right',
       title: {
-        display: true,
-        text: 'Humidity (%) / Heat Index (°C)'
+        display: false
       },
       grid: {
-        drawOnChartArea: false // only want the grid lines for one axis to show up
+        drawOnChartArea: false
+      },
+      ticks: {
+        color: '#aaa' // Y2-axis ticks color in dark theme
       }
     }
-  },
-  tooltips: {
-    mode: 'index',
-    intersect: false
-  },
-  hover: {
-    mode: 'nearest',
-    intersect: true
   },
   plugins: {
     legend: {
       display: true,
       position: 'top',
       labels: {
-        fontColor: '#333',
+        fontColor: '#ddd', // Legend labels color in dark theme
         usePointStyle: true
       }
+    },
+    tooltip: {
+      backgroundColor: 'rgba(50, 50, 50, 0.8)', // Tooltip background color in dark theme
+      titleColor: '#fff', // Tooltip title color in dark theme
+      bodyColor: '#fff', // Tooltip body text color in dark theme
+      caretPadding: 10,
+      cornerRadius: 5,
+      displayColors: false
     }
   },
   responsive: true,
-  maintainAspectRatio: false
+  maintainAspectRatio: false,
+  interaction: {
+    mode: 'index',
+    intersect: false,
+  },
+  elements: {
+    point: {
+      backgroundColor: 'rgba(255, 255, 255, 0.8)' // Data point background color in dark theme
+    }
+  }
+};
+
+// Chart options for light mode
+const lightChartOptions = {
+  scales: {
+    x: {
+      title: {
+        display: true,
+        text: 'Time',
+        color: 'gray' // X-axis title color in light theme
+      },
+      ticks: {
+        color: '#666' // X-axis ticks color in light theme
+      }
+    },
+    y: {
+      beginAtZero: true,
+      type: 'linear',
+      position: 'left',
+      title: {
+        display: false
+      },
+      ticks: {
+        color: '#666' // Y-axis ticks color in light theme
+      }
+    },
+    y2: {
+      beginAtZero: true,
+      type: 'linear',
+      position: 'right',
+      title: {
+        display: false
+      },
+      grid: {
+        drawOnChartArea: false
+      },
+      ticks: {
+        color: '#666' // Y2-axis ticks color in light theme
+      }
+    }
+  },
+  plugins: {
+    legend: {
+      display: true,
+      position: 'top',
+      labels: {
+        fontColor: '#333', // Legend labels color in light theme
+        usePointStyle: true
+      }
+    },
+    tooltip: {
+      backgroundColor: 'rgba(255, 255, 255, 0.8)', // Tooltip background color in light theme
+      titleColor: '#333', // Tooltip title color in light theme
+      bodyColor: '#333', // Tooltip body text color in light theme
+      caretPadding: 10,
+      cornerRadius: 5,
+      displayColors: false
+    }
+  },
+  responsive: true,
+  maintainAspectRatio: false,
+  interaction: {
+    mode: 'index',
+    intersect: false,
+  },
+  elements: {
+    point: {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)' // Data point background color in light theme
+    }
+  }
 };
 
 // Function to create chart
-function createChart(ctx, labels, temperatureData, humidityData, heatIndexData) {
+function createChart(ctx, labels, temperatureData, humidityData, heatIndexData, theme) {
+  const options = theme === 'dark' ? darkChartOptions : lightChartOptions;
+
   return new Chart(ctx, {
     type: 'line',
     data: {
@@ -157,29 +253,35 @@ function createChart(ctx, labels, temperatureData, humidityData, heatIndexData) 
         }
       ]
     },
-    options: chartOptions
+    options: options
   });
 }
 
+// Example usage with dark and light themes
 document.addEventListener('DOMContentLoaded', () => {
   const labels = Array.from({ length: 24 }, (_, i) => `${i}:00`);
   
   // Data for the first location
-  const temperatureData = [35, 36, 37, 38, 39, 40, 41, 40, 39, 38, 37, 36, 35, 34, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42];
-  const humidityData = [55, 60, 65, 70, 75, 80, 85, 80, 75, 70, 65, 60, 55, 50, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90];
+  const temperatureData = [22, 23, 24, 25, 26, 27, 28, 27, 26, 25, 24, 23, 22, 21, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29];
+  const humidityData = [50, 55, 60, 65, 70, 75, 80, 75, 70, 65, 60, 55, 50, 45, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85];
+  
   const heatIndexData = temperatureData.map((temp, index) => calculateHeatIndex(temp, humidityData[index]));
-
+  
+  // Example usage with dark theme
   const ctx1 = document.getElementById('conditionsChart').getContext('2d');
-  createChart(ctx1, labels, temperatureData, humidityData, heatIndexData);
-
+  createChart(ctx1, labels, temperatureData, humidityData, heatIndexData, 'dark == true,false');
+  
   // Data for the second location
-  const temperatureData2 = [30, 31, 32, 33, 34, 39, 36, 39, 34, 33, 32, 31, 30, 29, 28, 29, 30, 31, 32, 33, 34, 39, 36, 37];
-  const humidityData2 = [50, 55, 60, 65, 70, 79, 80, 79, 70, 65, 60, 55, 50, 45, 40, 45, 50, 55, 60, 65, 70, 79, 80, 85];
+  const temperatureData2 = [18, 19, 20, 21, 22, 27, 24, 27, 22, 21, 20, 19, 18, 17, 16, 17, 18, 19, 20, 21, 22, 27, 24, 25];
+  const humidityData2 = [45, 50, 55, 60, 65, 74, 75, 74, 65, 60, 55, 50, 45, 40, 35, 40, 45, 50, 55, 60, 65, 74, 75, 80];
+  
   const heatIndexData2 = temperatureData2.map((temp, index) => calculateHeatIndex(temp, humidityData2[index]));
-
+  
   const ctx2 = document.getElementById('conditionsChart2').getContext('2d');
-  createChart(ctx2, labels, temperatureData2, humidityData2, heatIndexData2);
+  createChart(ctx2, labels, temperatureData2, humidityData2, heatIndexData2, 'light ');
 });
+
+
 /* ====================================================================================================== */
 // Include Chart.js library in your HTML file
 // <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
