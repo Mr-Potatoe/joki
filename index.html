@@ -218,11 +218,11 @@
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-
+     L.control.scale().addTo(map); // Add scale control to the map
     // Add some sample markers within Zamboanga del Sur Provincial Government College (Aurora Campus)
     var markers = [
-        { lat: 7.947207, lng: 123.587943, status: 'danger', description: 'Farmers Hall' },
-        { lat:  7.947061, lng: 123.587606, status: 'safe', description: 'BSIS Building' }
+        { lat: 7.947177, lng: 123.587921, status: 'danger', description: 'Farmers Hall' },
+        { lat:  7.946998, lng: 123.587562, status: 'safe', description: 'BSIS Building' }
     ];
 
     var markerLayer = L.layerGroup();
