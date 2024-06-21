@@ -210,95 +210,95 @@
   </div>
 </section>
 <!-- Chart.js library script -->
-<script>
-  // Initialize the map
-  var map = L.map('map').setView([51.505, -0.09], 13);
+  <script>
+    // Initialize the map centered on Zamboanga del Sur Provincial Government College (Aurora Campus)
+    var map = L.map('map').setView([7.947207, 123.587943], 18);
 
-  // Add a tile layer to the map
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
+    // Add a tile layer to the map using OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
-  // Add some sample markers
-  var markers = [
-      { lat: 51.5, lng: -0.09, status: 'safe', description: 'BSIS Building' },
-      { lat: 51.49, lng: -0.08, status: 'danger', description: 'Farmers Hall' }
-  ];
+    // Add some sample markers within Zamboanga del Sur Provincial Government College (Aurora Campus)
+    var markers = [
+        { lat: 7.947207, lng: 123.587943, status: 'danger', description: 'Farmers Hall' },
+        { lat:  7.947061, lng: 123.587606, status: 'safe', description: 'BSIS Building' }
+    ];
 
-  var markerLayer = L.layerGroup();
+    var markerLayer = L.layerGroup();
 
-  markers.forEach(function(marker) {
-      var color, label;
-      switch (marker.status) {
-          case 'safe':
-              color = 'green';
-              label = 'Safe';
-              break;
-          case 'caution':
-              color = 'yellow';
-              label = 'Caution';
-              break;
-          case 'danger':
-              color = 'red';
-              label = 'Danger';
-              break;
-          default:
-              color = 'blue';
-              label = 'Unknown';
-      }
+    markers.forEach(function(marker) {
+        var color, label;
+        switch (marker.status) {
+            case 'safe':
+                color = 'green';
+                label = 'Safe';
+                break;
+            case 'caution':
+                color = 'yellow';
+                label = 'Caution';
+                break;
+            case 'danger':
+                color = 'red';
+                label = 'Danger';
+                break;
+            default:
+                color = 'blue';
+                label = 'Unknown';
+        }
 
-      var markerOptions = {
-          color: color,
-          radius: 8,
-          fillOpacity: 0.8
-      };
+        var markerOptions = {
+            color: color,
+            radius: 8,
+            fillOpacity: 0.8
+        };
 
-      var circleMarker = L.circleMarker([marker.lat, marker.lng], markerOptions).bindPopup(marker.description);
+        var circleMarker = L.circleMarker([marker.lat, marker.lng], markerOptions).bindPopup(marker.description);
 
-      circleMarker.addTo(markerLayer);
-  });
+        circleMarker.addTo(markerLayer);
+    });
 
-  markerLayer.addTo(map);
+    markerLayer.addTo(map);
 
-  function applyFilters() {
-      // Retrieve filter values
-      var zoneFilter = document.getElementById('zone-filter').value;
-      var sensorStatusFilter = document.getElementById('sensor-status-filter').value;
+    function applyFilters() {
+        // Retrieve filter values
+        var zoneFilter = document.getElementById('zone-filter').value;
+        var sensorStatusFilter = document.getElementById('sensor-status-filter').value;
 
-      // Clear existing markers
-      markerLayer.clearLayers();
+        // Clear existing markers
+        markerLayer.clearLayers();
 
-      // Add markers based on filters
-      markers.forEach(function(marker) {
-          if ((zoneFilter === 'all' || marker.status === zoneFilter) &&
-              (sensorStatusFilter === 'all')) {
-              var color;
-              switch (marker.status) {
-                  case 'safe':
-                      color = 'green';
-                      break;
-                  case 'caution':
-                      color = 'yellow';
-                      break;
-                  case 'danger':
-                      color = 'red';
-                      break;
-                  default:
-                      color = 'blue';
-              }
-              var markerOptions = {
-                  color: color,
-                  radius: 8,
-                  fillOpacity: 0.8
-              };
-              var circleMarker = L.circleMarker([marker.lat, marker.lng], markerOptions).bindPopup(marker.description);
-              circleMarker.addTo(markerLayer);
-          }
-      });
+        // Add markers based on filters
+        markers.forEach(function(marker) {
+            if ((zoneFilter === 'all' || marker.status === zoneFilter) &&
+                (sensorStatusFilter === 'all')) {
+                var color;
+                switch (marker.status) {
+                    case 'safe':
+                        color = 'green';
+                        break;
+                    case 'caution':
+                        color = 'yellow';
+                        break;
+                    case 'danger':
+                        color = 'red';
+                        break;
+                    default:
+                        color = 'blue';
+                }
+                var markerOptions = {
+                    color: color,
+                    radius: 8,
+                    fillOpacity: 0.8
+                };
+                var circleMarker = L.circleMarker([marker.lat, marker.lng], markerOptions).bindPopup(marker.description);
+                circleMarker.addTo(markerLayer);
+            }
+        });
 
-      markerLayer.addTo(map);
-  }
-</script>
+        markerLayer.addTo(map);
+    }
+  </script>
 
 <!-- alerts section -->
 <section id="alerts" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mb-6">
