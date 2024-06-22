@@ -316,32 +316,87 @@ function renderChart(canvasId, location) {
     type: 'line',
     data: {
       labels: [
-        '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00',
-        '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00',
-        '20:00', '21:00', '22:00', '23:00'
+        'Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7', 'Day 8', 'Day 9', 'Day 10',
+        'Day 11', 'Day 12', 'Day 13', 'Day 14'
       ],
       datasets: [{
-        label: `${location} Temperature`,
-        data: [22, 21, 20, 19, 18, 17, 16, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+        label: `${location} Temperature (°C)`,
+        data: [33, 31, 30, 39, 38, 37, 36, 35, 36, 37, 38, 39, 30, 31],
         borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: 'rgba(75, 192, 192, 1)'
       }, {
-        label: `${location} Humidity`,
-        data: [55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78],
+        label: `${location} Humidity (%)`,
+        data: [17.5, 18, 18.5, 19, 19.5, 20, 20.5, 21, 21.5, 21, 22.5, 22, 22.5, 24],
         borderColor: 'rgba(153, 102, 255, 1)',
-        borderWidth: 1
+        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: 'rgba(153, 102, 255, 1)'
       }, {
-        label: `${location} Heat Index`,
-        data: [23, 22, 21, 20, 19, 18, 17, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32],
+        label: `${location} Heat Index (°C)`,
+        data: [23, 22, 21, 20, 19, 18, 17, 16, 17, 18, 19, 20, 21, 22],
         borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 1
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: 'rgba(255, 99, 132, 1)'
       }]
     },
     options: {
       responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+        },
+      },
+      hover: {
+        mode: 'nearest',
+        intersect: true
+      },
       scales: {
-        x: { beginAtZero: true },
-        y: { beginAtZero: true }
+        x: {
+          beginAtZero: true,
+          grid: {
+            display: false
+          },
+          title: {
+            display: true,
+            text: 'Days',
+            color: '#666',
+            font: {
+              family: 'Helvetica',
+              size: 14,
+              weight: 'bold',
+              lineHeight: 1.2
+            },
+            padding: { top: 20, left: 0, right: 0, bottom: 0 }
+          }
+        },
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(200, 200, 200, 0.2)',
+          },
+          title: {
+            display: false,
+            text: 'Values',
+            color: '#666',
+            font: {
+              family: 'Helvetica',
+              size: 14,
+              weight: 'bold',
+              lineHeight: 1.2
+            },
+            padding: { top: 0, left: 0, right: 0, bottom: 20 }
+          }
+        }
       }
     }
   });
